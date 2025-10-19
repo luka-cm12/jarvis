@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS - Assistente Pessoal Inteligente</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0f1419 0%, #1a2332 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #00d4ff;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #ff4757;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.online {
+            background: #2ed573;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .panel h2 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .command-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .command-input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+        }
+
+        .device-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .device-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .device-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .device-card.active {
+            border-color: #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .device-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .log-panel {
+            grid-column: 1 / -1;
+            max-height: 300px;
+        }
+
+        .log-output {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            height: 250px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .log-timestamp {
+            color: #666;
+            margin-right: 10px;
+        }
+
+        .log-command {
+            color: #00d4ff;
+        }
+
+        .log-response {
+            color: #2ed573;
+        }
+
+        .log-system {
+            color: #ffa502;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .device-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">JARVIS</div>
+            <div class="status">
+                <div class="status-dot" id="statusDot"></div>
+                <span id="statusText">Desconectado</span>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <div class="panel">
+                <h2>🎤 Comando de Voz</h2>
+                <input type="text" class="command-input" id="commandInput" placeholder="Digite um comando ou use o botão para falar...">
+                <button class="btn" onclick="sendCommand()">Enviar Comando</button>
+            </div>
+
+            <div class="panel">
+                <h2>🏠 Dispositivos</h2>
+                <div class="device-grid" id="deviceGrid">
+                    <div class="device-card" onclick="toggleDevice('light_sala')">
+                        <div class="device-icon">💡</div>
+                        <div>Luz da Sala</div>
+                    </div>
+                    <div class="device-card" onclick="toggleDevice('light_quarto')">
+                        <div class="device-icon">💡</div>
+                        <div>Luz do Quarto</div>
+                    </div>
+                    <div class="device-card" onclick="toggleDevice('climate_main')">
+                        <div class="device-icon">🌡️</div>
+                        <div>Clima</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel log-panel">
+                <h2>📊 Log do Sistema</h2>
+                <div class="log-output" id="logOutput">
+                    <div class="log-entry log-system">
+                        <span class="log-timestamp">[SISTEMA]</span>
+                        Interface web iniciada - aguardando conexão com JARVIS...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Conectar ao SocketIO
+        const socket = io();
+        
+        let systemOnline = false;
+        
+        // Eventos do Socket
+        socket.on('connect', function() {
+            addLogEntry('SISTEMA', 'Conectado ao JARVIS');
+        });
+        
+        socket.on('disconnect', function() {
+            addLogEntry('SISTEMA', 'Desconectado do JARVIS');
+            updateStatus(false);
+        });
+        
+        socket.on('system_status', function(data) {
+            updateStatus(data.online);
+        });
+        
+        socket.on('ai_response', function(data) {
+            addLogEntry('IA', data.response, 'log-response');
+        });
+        
+        socket.on('voice_command', function(data) {
+            addLogEntry('COMANDO', data.command, 'log-command');
+        });
+        
+        socket.on('automation_update', function(data) {
+            addLogEntry('AUTOMAÇÃO', `Dispositivo ${data.device_id || data.action} ativado`);
+        });
+        
+        // Funções
+        function updateStatus(online) {
+            systemOnline = online;
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+            
+            if (online) {
+                statusDot.classList.add('online');
+                statusText.textContent = 'Online';
+            } else {
+                statusDot.classList.remove('online');
+                statusText.textContent = 'Offline';
+            }
+        }
+        
+        function sendCommand() {
+            const input = document.getElementById('commandInput');
+            const command = input.value.trim();
+            
+            if (command) {
+                socket.emit('send_command', { command: command });
+                addLogEntry('USUÁRIO', command, 'log-command');
+                input.value = '';
+            }
+        }
+        
+        function toggleDevice(deviceId) {
+            socket.emit('control_device', {
+                device_id: deviceId,
+                action: 'toggle'
+            });
+            
+            // Alternar visualmente
+            const card = event.currentTarget;
+            card.classList.toggle('active');
+        }
+        
+        function addLogEntry(type, message, className = 'log-system') {
+            const logOutput = document.getElementById('logOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${className}`;
+            entry.innerHTML = `
+                <span class="log-timestamp">[${timestamp}] [${type}]</span>
+                ${message}
+            `;
+            
+            logOutput.appendChild(entry);
+            logOutput.scrollTop = logOutput.scrollHeight;
+            
+            // Limitar número de entradas
+            const entries = logOutput.querySelectorAll('.log-entry');
+            if (entries.length > 50) {
+                entries[0].remove();
+            }
+        }
+        
+        // Enter para enviar comando
+        document.getElementById('commandInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendCommand();
+            }
+        });
+        
+        // Inicialização
+        addLogEntry('SISTEMA', 'Interface carregada - conectando...');
+    </script>
+</body>
+</html>
