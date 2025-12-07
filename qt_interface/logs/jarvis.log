@@ -1,0 +1,3 @@
+2025-12-06 21:51:04 | ERROR    | core.config_manager | Arquivo de configuração não encontrado: config\config.json
+2025-12-06 21:51:04 | INFO     | core.config_manager | Copie config.example.json para config.json e configure suas credenciais
+2025-12-06 21:51:04 | ERROR    | main | Falha ao carregar configurações. Verifique config/config.json

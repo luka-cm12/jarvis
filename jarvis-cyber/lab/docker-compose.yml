@@ -1,0 +1,117 @@
+version: '3.8'
+
+services:
+  # Ambiente de teste Linux vulnerável
+  vulnerable-linux:
+    image: metasploitable/metasploitable2
+    container_name: jarvis-lab-linux
+    networks:
+      - jarvis-lab
+    ports:
+      - "2222:22"   # SSH
+      - "8080:80"   # HTTP
+      - "4443:443"  # HTTPS
+    volumes:
+      - ./logs:/shared/logs
+    restart: unless-stopped
+
+  # Servidor web vulnerável
+  dvwa:
+    image: vulnerables/web-dvwa
+    container_name: jarvis-lab-dvwa
+    networks:
+      - jarvis-lab
+    ports:
+      - "8081:80"
+    environment:
+      - MYSQL_ROOT_PASSWORD=vulnerables
+      - MYSQL_DATABASE=dvwa
+      - MYSQL_USER=dvwa
+      - MYSQL_PASSWORD=password
+    restart: unless-stopped
+
+  # Aplicação vulnerável para testes
+  webgoat:
+    image: webgoat/goatandwolf
+    container_name: jarvis-lab-webgoat
+    networks:
+      - jarvis-lab
+    ports:
+      - "8082:8080"
+    restart: unless-stopped
+
+  # Banco MySQL para testes
+  mysql-lab:
+    image: mysql:5.7
+    container_name: jarvis-lab-mysql
+    networks:
+      - jarvis-lab
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=labpassword
+      - MYSQL_DATABASE=testdb
+      - MYSQL_USER=testuser
+      - MYSQL_PASSWORD=testpass
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+
+  # Servidor FTP vulnerável
+  pure-ftpd:
+    image: stilliard/pure-ftpd:hardened
+    container_name: jarvis-lab-ftp
+    networks:
+      - jarvis-lab
+    ports:
+      - "21:21"
+      - "30000-30009:30000-30009"
+    environment:
+      - PUBLICHOST=localhost
+      - FTP_USER_NAME=testuser
+      - FTP_USER_PASS=testpass
+      - FTP_USER_HOME=/home/testuser
+    volumes:
+      - ftp_data:/home/testuser
+    restart: unless-stopped
+
+  # Servidor de monitoramento
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: jarvis-lab-portainer
+    networks:
+      - jarvis-lab
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    restart: unless-stopped
+
+  # Servidor Kali Linux para testes
+  kali-linux:
+    image: kalilinux/kali-rolling:latest
+    container_name: jarvis-lab-kali
+    networks:
+      - jarvis-lab
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./tools:/opt/jarvis-tools
+      - ./logs:/var/log/jarvis
+    command: bash
+    restart: unless-stopped
+
+networks:
+  jarvis-lab:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+
+volumes:
+  mysql_data:
+  ftp_data:
+  portainer_data:

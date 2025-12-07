@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0a0e27">
+    <title>JARVIS Mobile Command Center</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(ellipse at center, #0a0e27 0%, #16213e 50%, #0a0e27 100%);
+            color: #00d4ff;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Efeitos de partículas de fundo */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background: rgba(0, 212, 255, 0.6);
+            border-radius: 50%;
+            animation: particleFloat 15s linear infinite;
+        }
+        
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: scale(1); }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) scale(0); opacity: 0; }
+        }
+        
+        .mobile-container {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(0, 212, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 0 0 15px currentColor;
+            animation: logoGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes logoGlow {
+            from { text-shadow: 0 0 15px #00d4ff; }
+            to { text-shadow: 0 0 25px #00d4ff, 0 0 35px #00d4ff; }
+        }
+        
+        .status-panel {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #00ff88;
+            box-shadow: 0 0 15px currentColor;
+            animation: statusPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.2); }
+        }
+        
+        .status-text {
+            font-size: 12px;
+            color: #00ff88;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+            animation: sectionFadeIn 0.5s ease-out;
+        }
+        
+        @keyframes sectionFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Seção Home */
+        .command-section {
+            margin-bottom: 30px;
+        }
+        
+        .voice-input-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .voice-input {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .text-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 25px;
+            background: rgba(0, 212, 255, 0.05);
+            color: #00d4ff;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .text-input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            background: rgba(0, 212, 255, 0.1);
+        }
+        
+        .voice-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #00d4ff, #0066cc);
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .voice-btn:active {
+            transform: scale(0.9);
+        }
+        
+        .voice-btn.listening {
+            animation: listening 1s ease-in-out infinite;
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+        }
+        
+        @keyframes listening {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 68, 68, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(255, 68, 68, 0.8); }
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .action-card {
+            padding: 20px 15px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .action-card:active {
+            transform: scale(0.95);
+            background: rgba(0, 212, 255, 0.2);
+        }
+        
+        .action-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .action-label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* Seção de dispositivos móveis */
+        .device-list {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .device-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 15px;
+            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border-left: 4px solid #00ff88;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .device-item:active {
+            transform: translateX(5px);
+            background: rgba(0, 212, 255, 0.1);
+        }
+        
+        .device-info {
+            flex: 1;
+        }
+        
+        .device-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #00d4ff;
+        }
+        
+        .device-details {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .device-status {
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .status-online {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+        
+        .status-vulnerable {
+            background: rgba(255, 68, 68, 0.2);
+            color: #ff4444;
+            border: 1px solid rgba(255, 68, 68, 0.3);
+        }
+        
+        /* Seção de rede */
+        .network-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .control-btn {
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.2), rgba(255, 69, 0, 0.3));
+            border: 2px solid rgba(255, 165, 0, 0.5);
+            border-radius: 12px;
+            color: #ff8c00;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .control-btn:active {
+            transform: scale(0.95);
+            border-color: #ff8c00;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.4);
+        }
+        
+        .scan-results {
+            max-height: 50vh;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+        
+        .scan-item {
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border-left: 3px solid #00ff88;
+            background: rgba(0, 255, 136, 0.05);
+            animation: scanItemAppear 0.5s ease-out;
+        }
+        
+        @keyframes scanItemAppear {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .vulnerability-item {
+            border-left-color: #ff4444;
+            background: rgba(255, 68, 68, 0.05);
+        }
+        
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            background: rgba(0, 212, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+        }
+        
+        .nav-item {
+            padding: 12px 20px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            font-size: 20px;
+        }
+        
+        .nav-item.active {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+        
+        /* Responsividade para diferentes tamanhos de tela */
+        @media (max-width: 360px) {
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .network-controls {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Efeitos de loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 212, 255, 0.3);
+            border-top: 3px solid #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="mobile-container">
+        <div class="header">
+            <div class="logo">JARVIS</div>
+            <div class="status-panel">
+                <div class="status-indicator" id="statusIndicator"></div>
+                <div class="status-text" id="statusText">ONLINE</div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <!-- Seção Home -->
+            <div class="section active" id="homeSection">
+                <div class="command-section">
+                    <div class="voice-input-container">
+                        <div class="voice-input">
+                            <input type="text" class="text-input" id="commandInput" 
+                                   placeholder="Comando para JARVIS...">
+                            <button class="voice-btn" id="voiceBtn" onclick="toggleVoiceInput()">🎤</button>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <div class="action-card" onclick="executeQuickAction('scan')">
+                            <span class="action-icon">🔍</span>
+                            <span class="action-label">Varrer Rede</span>
+                        </div>
+                        <div class="action-card" onclick="executeQuickAction('devices')">
+                            <span class="action-icon">📱</span>
+                            <span class="action-label">Dispositivos</span>
+                        </div>
+                        <div class="action-card" onclick="executeQuickAction('security')">
+                            <span class="action-icon">🔒</span>
+                            <span class="action-label">Segurança</span>
+                        </div>
+                        <div class="action-card" onclick="executeQuickAction('pentest')">
+                            <span class="action-icon">🎯</span>
+                            <span class="action-label">PenTest</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seção Dispositivos -->
+            <div class="section" id="devicesSection">
+                <h3 style="margin-bottom: 20px;">📱 Dispositivos Móveis</h3>
+                <div class="device-list" id="deviceList">
+                    <!-- Dispositivos serão carregados dinamicamente -->
+                </div>
+            </div>
+            
+            <!-- Seção Network -->
+            <div class="section" id="networkSection">
+                <h3 style="margin-bottom: 20px;">🌐 Análise de Rede</h3>
+                <div class="network-controls">
+                    <button class="control-btn" onclick="startNetworkScan()">Varrer Rede</button>
+                    <button class="control-btn" onclick="startPenTest()">Pen Test</button>
+                </div>
+                <div class="scan-results" id="scanResults">
+                    <div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.5);">
+                        Clique em "Varrer Rede" para iniciar
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seção Settings -->
+            <div class="section" id="settingsSection">
+                <h3 style="margin-bottom: 20px;">⚙️ Configurações</h3>
+                <div style="padding: 20px; text-align: center; color: rgba(255,255,255,0.5);">
+                    Configurações em desenvolvimento...
+                </div>
+            </div>
+        </div>
+        
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="showSection('home')">🏠</div>
+            <div class="nav-item" onclick="showSection('devices')">📱</div>
+            <div class="nav-item" onclick="showSection('network')">🌐</div>
+            <div class="nav-item" onclick="showSection('settings')">⚙️</div>
+        </div>
+    </div>
+    
+    <script>
+        // Estado global
+        let isListening = false;
+        let currentSection = 'home';
+        let socket = null;
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            connectToServer();
+            setupEventListeners();
+        });
+        
+        // Criar partículas de fundo
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
+        // Conectar ao servidor
+        function connectToServer() {
+            try {
+                socket = io();
+                
+                socket.on('connect', function() {
+                    updateStatus(true, 'ONLINE');
+                });
+                
+                socket.on('disconnect', function() {
+                    updateStatus(false, 'OFFLINE');
+                });
+                
+                socket.on('ai_response', function(data) {
+                    showNotification('JARVIS: ' + data.response);
+                });
+                
+                socket.on('network_scan_complete', function(data) {
+                    displayScanResults(data);
+                });
+                
+                socket.on('mobile_devices_found', function(data) {
+                    displayMobileDevices(data);
+                });
+                
+            } catch (error) {
+                console.log('Erro na conexão:', error);
+                updateStatus(false, 'ERRO');
+            }
+        }
+        
+        // Configurar event listeners
+        function setupEventListeners() {
+            const commandInput = document.getElementById('commandInput');
+            
+            commandInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendCommand();
+                }
+            });
+        }
+        
+        // Navegação entre seções
+        function showSection(section) {
+            // Esconder todas as seções
+            document.querySelectorAll('.section').forEach(s => {
+                s.classList.remove('active');
+            });
+            
+            // Mostrar seção selecionada
+            document.getElementById(section + 'Section').classList.add('active');
+            
+            // Atualizar navegação
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            currentSection = section;
+            
+            // Carregar dados da seção
+            if (section === 'devices') {
+                loadMobileDevices();
+            } else if (section === 'network') {
+                loadNetworkStatus();
+            }
+        }
+        
+        // Input de voz
+        function toggleVoiceInput() {
+            const voiceBtn = document.getElementById('voiceBtn');
+            
+            if (!isListening) {
+                startVoiceInput();
+                voiceBtn.classList.add('listening');
+                voiceBtn.textContent = '🔴';
+                isListening = true;
+            } else {
+                stopVoiceInput();
+                voiceBtn.classList.remove('listening');
+                voiceBtn.textContent = '🎤';
+                isListening = false;
+            }
+        }
+        
+        function startVoiceInput() {
+            // Implementar reconhecimento de voz
+            if ('webkitSpeechRecognition' in window) {
+                const recognition = new webkitSpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = 'pt-BR';
+                
+                recognition.onresult = function(event) {
+                    const result = event.results[event.resultIndex][0].transcript;
+                    document.getElementById('commandInput').value = result;
+                };
+                
+                recognition.start();
+            } else {
+                showNotification('Reconhecimento de voz não suportado');
+            }
+        }
+        
+        function stopVoiceInput() {
+            // Parar reconhecimento de voz
+        }
+        
+        // Enviar comando
+        function sendCommand() {
+            const input = document.getElementById('commandInput');
+            const command = input.value.trim();
+            
+            if (command) {
+                if (socket) {
+                    socket.emit('send_command', { command: command });
+                }
+                
+                showNotification('Comando enviado: ' + command);
+                input.value = '';
+            }
+        }
+        
+        // Ações rápidas
+        function executeQuickAction(action) {
+            switch (action) {
+                case 'scan':
+                    startNetworkScan();
+                    showSection('network');
+                    break;
+                case 'devices':
+                    showSection('devices');
+                    break;
+                case 'security':
+                    showNotification('Verificando segurança...');
+                    break;
+                case 'pentest':
+                    startPenTest();
+                    break;
+            }
+        }
+        
+        // Scanner de rede
+        function startNetworkScan() {
+            const resultsDiv = document.getElementById('scanResults');
+            resultsDiv.innerHTML = '<div style="text-align: center; padding: 20px;"><div class="loading"></div> Escaneando rede...</div>';
+            
+            if (socket) {
+                socket.emit('request_network_scan');
+            }
+            
+            // Simular resultados para demonstração
+            setTimeout(() => {
+                const mockResults = {
+                    results: {
+                        '192.168.1.1': { ports: [80, 443], vulnerabilities: [] },
+                        '192.168.1.100': { ports: [8080], vulnerabilities: [{ description: 'Interface web exposta' }] }
+                    },
+                    summary: { devices_found: 2, vulnerabilities: 1 }
+                };
+                displayScanResults(mockResults);
+            }, 3000);
+        }
+        
+        function displayScanResults(data) {
+            const resultsDiv = document.getElementById('scanResults');
+            let html = '';
+            
+            for (const [ip, info] of Object.entries(data.results)) {
+                html += `<div class="scan-item">
+                    <strong>📡 ${ip}</strong><br>
+                    Portas: ${info.ports.join(', ')}<br>
+                    <small>Última verificação: agora</small>
+                </div>`;
+                
+                if (info.vulnerabilities && info.vulnerabilities.length > 0) {
+                    info.vulnerabilities.forEach(vuln => {
+                        html += `<div class="scan-item vulnerability-item">
+                            <strong>⚠️ Vulnerabilidade em ${ip}</strong><br>
+                            ${vuln.description}
+                        </div>`;
+                    });
+                }
+            }
+            
+            resultsDiv.innerHTML = html;
+        }
+        
+        // Carregar dispositivos móveis
+        function loadMobileDevices() {
+            const deviceList = document.getElementById('deviceList');
+            
+            // Dados mock para demonstração
+            const mockDevices = [
+                {
+                    name: 'iPhone 15',
+                    ip: '192.168.1.101',
+                    os: 'iOS 17.1',
+                    status: 'online',
+                    vulnerabilities: 0
+                },
+                {
+                    name: 'Samsung Galaxy',
+                    ip: '192.168.1.102', 
+                    os: 'Android 14',
+                    status: 'vulnerable',
+                    vulnerabilities: 2
+                }
+            ];
+            
+            displayMobileDevices(mockDevices);
+        }
+        
+        function displayMobileDevices(devices) {
+            const deviceList = document.getElementById('deviceList');
+            let html = '';
+            
+            devices.forEach(device => {
+                const statusClass = device.vulnerabilities > 0 ? 'status-vulnerable' : 'status-online';
+                const statusText = device.vulnerabilities > 0 ? 'VULNERÁVEL' : 'SEGURO';
+                
+                html += `<div class="device-item">
+                    <div class="device-info">
+                        <div class="device-name">${device.name}</div>
+                        <div class="device-details">${device.ip} • ${device.os}</div>
+                    </div>
+                    <div class="device-status ${statusClass}">${statusText}</div>
+                </div>`;
+            });
+            
+            deviceList.innerHTML = html;
+        }
+        
+        // Teste de penetração
+        function startPenTest() {
+            showNotification('⚠️ Iniciando teste de penetração ético...');
+            
+            // Simular pentest
+            setTimeout(() => {
+                showNotification('🎯 PenTest concluído - 2 vulnerabilidades encontradas');
+            }, 5000);
+        }
+        
+        // Atualizar status
+        function updateStatus(online, text) {
+            const indicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+            
+            if (online) {
+                indicator.style.background = '#00ff88';
+                indicator.style.boxShadow = '0 0 15px #00ff88';
+            } else {
+                indicator.style.background = '#ff4444';
+                indicator.style.boxShadow = '0 0 15px #ff4444';
+            }
+            
+            statusText.textContent = text;
+        }
+        
+        // Notificações
+        function showNotification(message) {
+            // Criar notificação temporária
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: rgba(0, 212, 255, 0.9);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 25px;
+                z-index: 1000;
+                backdrop-filter: blur(20px);
+                animation: notificationSlide 0.5s ease-out;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+        
+        // Carregar status da rede
+        function loadNetworkStatus() {
+            // Implementar carregamento de status
+        }
+    </script>
+    
+    <style>
+        @keyframes notificationSlide {
+            from { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+    </style>
+</body>
+</html>

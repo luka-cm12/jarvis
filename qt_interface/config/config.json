@@ -1,0 +1,28 @@
+{
+  "openai": {
+    "api_key": "sk-proj-YOUR_API_KEY_HERE",
+    "model": "gpt-4o-mini",
+    "max_tokens": 300
+  },
+  "voice": {
+    "language": "pt-BR",
+    "rate": 150,
+    "volume": 1.0,
+    "timeout": 5
+  },
+  "network": {
+    "scan_range": "192.168.1.0/24",
+    "auto_scan_interval": 30,
+    "timeout": 5
+  },
+  "ui": {
+    "theme_color": "#4fe0ff",
+    "accent_color": "#00ffd1",
+    "background_color": "#0b0f14",
+    "text_color": "#cfefff"
+  },
+  "system": {
+    "debug": true,
+    "log_level": "INFO"
+  }
+}

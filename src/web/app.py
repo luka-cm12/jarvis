@@ -220,7 +220,9 @@ class JarvisWebInterface:
             self.app,
             host=self.host,
             port=self.port,
-            debug=self.debug
+            debug=self.debug,
+            use_reloader=False,  # Desativar reloader para threading
+            allow_unsafe_werkzeug=True
         )
 
 # Templates HTML (serão salvos em arquivos separados)

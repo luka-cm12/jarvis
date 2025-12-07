@@ -230,14 +230,18 @@ Você está integrado a um sistema de automação residencial e pode controlar d
         
         if any(word in command_lower for word in ['acender', 'ligar', 'acenda']):
             # Emitir evento de automação
-            self.event_manager.emit(Events.AUTOMATION_TRIGGERED, {
+            from core.events import EventManager
+            event_manager = EventManager.get_instance()
+            event_manager.emit(Events.AUTOMATION_TRIGGERED, {
                 'action': 'turn_on_lights',
                 'location': self._extract_location(command)
             })
             return "Acendendo as luzes conforme solicitado."
         
         elif any(word in command_lower for word in ['apagar', 'desligar', 'apague']):
-            self.event_manager.emit(Events.AUTOMATION_TRIGGERED, {
+            from core.events import EventManager
+            event_manager = EventManager.get_instance()
+            event_manager.emit(Events.AUTOMATION_TRIGGERED, {
                 'action': 'turn_off_lights',
                 'location': self._extract_location(command)
             })

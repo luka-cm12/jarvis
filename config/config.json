@@ -1,0 +1,101 @@
+{
+  "jarvis": {
+    "name": "JARVIS",
+    "version": "1.0.0",
+    "personality": {
+      "name": "JARVIS",
+      "tone": "professional",
+      "style": "elegant",
+      "language": "pt-BR",
+      "voice_id": "brazilian_male"
+    },
+    "wake_word": "jarvis",
+    "response_timeout": 5
+  },
+  
+  "audio": {
+    "input_device": null,
+    "output_device": null,
+    "sample_rate": 16000,
+    "chunk_size": 1024,
+    "channels": 1,
+    "voice_settings": {
+      "rate": 180,
+      "volume": 0.8,
+      "voice": 0
+    }
+  },
+
+  "ai": {
+    "openai_api_key": "sua-api-key-aqui",
+    "model": "gpt-3.5-turbo",
+    "max_tokens": 150,
+    "temperature": 0.7,
+    "system_prompt": "Você é JARVIS, um assistente pessoal inteligente inspirado no assistente do Tony Stark. Você é elegante, profissional, eficiente e tem um toque de sofisticação britânica. Você está aqui para ajudar com tarefas domésticas, automação, informações e muito mais. Seja conciso mas informativo."
+  },
+
+  "home_automation": {
+    "home_assistant": {
+      "url": "http://localhost:8123",
+      "api_token": "seu-token-home-assistant",
+      "enabled": false
+    },
+    "philips_hue": {
+      "bridge_ip": "192.168.1.100",
+      "username": "seu-usuario-hue",
+      "enabled": false
+    }
+  },
+
+  "services": {
+    "weather": {
+      "api_key": "sua-api-key-weather",
+      "default_city": "São Paulo",
+      "provider": "openweathermap"
+    },
+    "news": {
+      "api_key": "sua-api-key-news",
+      "country": "br",
+      "language": "pt"
+    },
+    "spotify": {
+      "client_id": "seu-spotify-client-id",
+      "client_secret": "seu-spotify-client-secret",
+      "redirect_uri": "http://localhost:8080/callback"
+    }
+  },
+
+  "database": {
+    "type": "sqlite",
+    "path": "data/jarvis.db",
+    "backup_interval": 24
+  },
+
+  "logging": {
+    "level": "INFO",
+    "file": "logs/jarvis.log",
+    "max_size": "10MB",
+    "backup_count": 5
+  },
+
+  "web": {
+    "host": "localhost",
+    "port": 5000,
+    "debug": true,
+    "secret_key": "sua-chave-secreta-aqui"
+  },
+
+  "security": {
+    "encryption_key": "sua-chave-encriptacao",
+    "max_failed_attempts": 3,
+    "lockout_duration": 300
+  },
+
+  "features": {
+    "voice_activation": true,
+    "continuous_listening": false,
+    "learning_mode": true,
+    "auto_responses": true,
+    "notifications": true
+  }
+}

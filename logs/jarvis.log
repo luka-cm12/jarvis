@@ -1,0 +1,179 @@
+2025-12-06 20:22:24 | INFO     | test | 🔧 SISTEMA: Teste do sistema de logging
+2025-12-06 20:22:24 | INFO     | test | 🧠 IA: Teste do módulo de IA
+2025-12-06 20:22:24 | INFO     | test | 🎤 VOZ: Teste do módulo de voz
+2025-12-06 20:22:24 | INFO     | core.config_manager | Configurações carregadas com sucesso
+2025-12-06 20:22:24 | WARNING  | core.config_manager | OpenAI API key não configurada - funcionalidade de IA limitada
+2025-12-06 20:22:24 | INFO     | ai.brain | 🧠 IA: OpenAI API não configurada - usando respostas pré-definidas
+2025-12-06 20:22:24 | INFO     | ai.brain | 🧠 IA: Motor de IA inicializado
+2025-12-06 20:22:24 | INFO     | core.config_manager | Configurações carregadas com sucesso
+2025-12-06 20:22:24 | WARNING  | core.config_manager | OpenAI API key não configurada - funcionalidade de IA limitada
+2025-12-06 20:22:24 | INFO     | ai.learning | 🧠 IA: Carregadas 0 preferências
+2025-12-06 20:22:24 | INFO     | ai.learning | 🧠 IA: Sistema de aprendizado inicializado
+2025-12-06 20:22:24 | INFO     | core.config_manager | Configurações carregadas com sucesso
+2025-12-06 20:22:24 | WARNING  | core.config_manager | OpenAI API key não configurada - funcionalidade de IA limitada
+2025-12-06 20:22:24 | INFO     | web.app | 🔧 SISTEMA: Interface web inicializada
+2025-12-06 20:23:47 | INFO     | core.config_manager | Configurações carregadas com sucesso
+2025-12-06 20:23:47 | WARNING  | core.config_manager | OpenAI API key não configurada - funcionalidade de IA limitada
+2025-12-06 20:23:47 | INFO     | demo | 🔧 SISTEMA: Inicializando JARVIS...
+2025-12-06 20:23:47 | INFO     | ai.brain | 🧠 IA: OpenAI API não configurada - usando respostas pré-definidas
+2025-12-06 20:23:47 | INFO     | ai.brain | 🧠 IA: Motor de IA inicializado
+2025-12-06 20:24:24 | INFO     | core.config_manager | Configurações carregadas com sucesso
+2025-12-06 20:24:24 | WARNING  | core.config_manager | OpenAI API key não configurada - funcionalidade de IA limitada
+2025-12-06 20:24:24 | INFO     | demo | 🔧 SISTEMA: Inicializando JARVIS...
+2025-12-06 20:24:24 | INFO     | ai.brain | 🧠 IA: OpenAI API não configurada - usando respostas pré-definidas
+2025-12-06 20:24:24 | INFO     | ai.brain | 🧠 IA: Motor de IA inicializado
+2025-12-06 20:25:03 | INFO     | test | 🔧 SISTEMA: Teste do sistema de logging
+2025-12-06 20:25:03 | INFO     | test | 🧠 IA: Teste do módulo de IA
+2025-12-06 20:25:03 | INFO     | test | 🎤 VOZ: Teste do módulo de voz
+2025-12-06 20:25:03 | INFO     | core.config_manager | Configurações carregadas com sucesso
+2025-12-06 20:25:03 | WARNING  | core.config_manager | OpenAI API key não configurada - funcionalidade de IA limitada
+2025-12-06 20:25:03 | INFO     | ai.brain | 🧠 IA: OpenAI API não configurada - usando respostas pré-definidas
+2025-12-06 20:25:03 | INFO     | ai.brain | 🧠 IA: Motor de IA inicializado
+2025-12-06 20:27:14 | INFO     | test | 🔧 SISTEMA: Teste do sistema de logging
+2025-12-06 20:27:14 | INFO     | test | 🧠 IA: Teste do módulo de IA
+2025-12-06 20:27:14 | INFO     | test | 🎤 VOZ: Teste do módulo de voz
+2025-12-06 20:27:14 | INFO     | core.config_manager | Configurações carregadas com sucesso
+2025-12-06 20:27:14 | WARNING  | core.config_manager | OpenAI API key não configurada - funcionalidade de IA limitada
+2025-12-06 20:27:14 | INFO     | ai.brain | 🧠 IA: OpenAI API não configurada - usando respostas pré-definidas
+2025-12-06 20:27:14 | INFO     | ai.brain | 🧠 IA: Motor de IA inicializado
+2025-12-06 20:27:14 | INFO     | core.config_manager | Configurações carregadas com sucesso
+2025-12-06 20:27:14 | WARNING  | core.config_manager | OpenAI API key não configurada - funcionalidade de IA limitada
+2025-12-06 20:27:14 | INFO     | ai.learning | 🧠 IA: Carregadas 0 preferências
+2025-12-06 20:27:14 | INFO     | ai.learning | 🧠 IA: Sistema de aprendizado inicializado
+2025-12-06 20:27:14 | INFO     | core.config_manager | Configurações carregadas com sucesso
+2025-12-06 20:27:14 | WARNING  | core.config_manager | OpenAI API key não configurada - funcionalidade de IA limitada
+2025-12-06 20:27:14 | INFO     | web.app | 🔧 SISTEMA: Interface web inicializada
+2025-12-06 20:28:22 | INFO     | test | 🔧 SISTEMA: Teste do sistema de logging
+2025-12-06 20:28:22 | INFO     | test | 🧠 IA: Teste do módulo de IA
+2025-12-06 20:28:22 | INFO     | test | 🎤 VOZ: Teste do módulo de voz
+2025-12-06 20:28:22 | INFO     | core.config_manager | Configurações carregadas com sucesso
+2025-12-06 20:28:22 | WARNING  | core.config_manager | OpenAI API key não configurada - funcionalidade de IA limitada
+2025-12-06 20:28:22 | INFO     | ai.brain | 🧠 IA: OpenAI API não configurada - usando respostas pré-definidas
+2025-12-06 20:28:22 | INFO     | ai.brain | 🧠 IA: Motor de IA inicializado
+2025-12-06 20:28:22 | INFO     | core.config_manager | Configurações carregadas com sucesso
+2025-12-06 20:28:22 | WARNING  | core.config_manager | OpenAI API key não configurada - funcionalidade de IA limitada
+2025-12-06 20:28:22 | INFO     | web.app | 🔧 SISTEMA: Interface web inicializada
+2025-12-06 20:31:48 | INFO     | test | 🔧 SISTEMA: Teste do sistema de logging
+2025-12-06 20:31:48 | INFO     | test | 🧠 IA: Teste do módulo de IA
+2025-12-06 20:31:48 | INFO     | test | 🎤 VOZ: Teste do módulo de voz
+2025-12-06 20:31:48 | INFO     | core.config_manager | Configurações carregadas com sucesso
+2025-12-06 20:31:48 | WARNING  | core.config_manager | OpenAI API key não configurada - funcionalidade de IA limitada
+2025-12-06 20:31:48 | INFO     | ai.brain | 🧠 IA: OpenAI API não configurada - usando respostas pré-definidas
+2025-12-06 20:31:48 | INFO     | ai.brain | 🧠 IA: Motor de IA inicializado
+2025-12-06 20:31:48 | INFO     | core.config_manager | Configurações carregadas com sucesso
+2025-12-06 20:31:48 | WARNING  | core.config_manager | OpenAI API key não configurada - funcionalidade de IA limitada
+2025-12-06 20:31:48 | INFO     | ai.learning | 🧠 IA: Carregadas 0 preferências
+2025-12-06 20:31:48 | INFO     | ai.learning | 🧠 IA: Sistema de aprendizado inicializado
+2025-12-06 20:31:48 | INFO     | core.config_manager | Configurações carregadas com sucesso
+2025-12-06 20:31:48 | WARNING  | core.config_manager | OpenAI API key não configurada - funcionalidade de IA limitada
+2025-12-06 20:31:48 | INFO     | web.app | 🔧 SISTEMA: Interface web inicializada
+2025-12-06 20:49:58 | INFO     | core.config_manager | Configurações carregadas com sucesso
+2025-12-06 20:49:58 | WARNING  | core.config_manager | OpenAI API key não configurada - funcionalidade de IA limitada
+2025-12-06 20:49:58 | INFO     | __main__ | Inicializando JARVIS...
+2025-12-06 20:49:58 | INFO     | core.jarvis | 🔧 SISTEMA: JARVIS criado
+2025-12-06 20:49:58 | INFO     | core.jarvis | 🔧 SISTEMA: Inicializando componentes do JARVIS...
+2025-12-06 20:49:58 | INFO     | core.jarvis | 🔧 SISTEMA: 🔊 Inicializando sistema de síntese de voz...
+2025-12-06 20:49:58 | INFO     | comtypes.client._code_cache | Could not import comtypes.gen, trying to create it.
+2025-12-06 20:49:58 | INFO     | comtypes.client._code_cache | Created comtypes.gen directory: 'C:\Python313\Lib\site-packages\comtypes\gen'
+2025-12-06 20:49:58 | INFO     | comtypes.client._code_cache | Writing __init__.py file: 'C:\Python313\Lib\site-packages\comtypes\gen\__init__.py'
+2025-12-06 20:49:58 | INFO     | comtypes.client._code_cache | Using writeable comtypes cache directory: 'C:\Python313\Lib\site-packages\comtypes\gen'
+2025-12-06 20:49:58 | INFO     | comtypes.client._generate | Could not import comtypes.gen._C866CA3A_32F7_11D2_9602_00C04F8EE628_0_5_4: No module named 'comtypes.gen._C866CA3A_32F7_11D2_9602_00C04F8EE628_0_5_4'
+2025-12-06 20:49:58 | INFO     | comtypes.client._generate | # Generating comtypes.gen._C866CA3A_32F7_11D2_9602_00C04F8EE628_0_5_4
+2025-12-06 20:49:58 | INFO     | comtypes.client._generate | # Generating comtypes.gen.SpeechLib
+2025-12-06 20:49:58 | INFO     | comtypes.client._generate | Could not import comtypes.gen._00020430_0000_0000_C000_000000000046_0_2_0: No module named 'comtypes.gen._00020430_0000_0000_C000_000000000046_0_2_0'
+2025-12-06 20:49:58 | INFO     | comtypes.client._generate | # Generating comtypes.gen._00020430_0000_0000_C000_000000000046_0_2_0
+2025-12-06 20:49:58 | INFO     | comtypes.client._generate | # Generating comtypes.gen.stdole
+2025-12-06 20:49:59 | INFO     | core.voice_synthesis | 🎤 VOZ: Voz configurada: Microsoft Maria Desktop - Portuguese(Brazil)
+2025-12-06 20:49:59 | INFO     | core.voice_synthesis | 🎤 VOZ: Engine de síntese inicializado com sucesso
+2025-12-06 20:49:59 | INFO     | core.jarvis | 🔧 SISTEMA: 🎤 Inicializando sistema de reconhecimento de voz...
+2025-12-06 20:49:59 | INFO     | core.voice_recognition | 🎤 VOZ: Microfone inicializado com sucesso
+2025-12-06 20:49:59 | INFO     | core.voice_recognition | 🎤 VOZ: Calibrando para ruído ambiente...
+2025-12-06 20:50:01 | INFO     | core.voice_recognition | 🎤 VOZ: Calibração concluída
+2025-12-06 20:50:01 | INFO     | core.jarvis | 🔧 SISTEMA: 🧠 Inicializando motor de IA...
+2025-12-06 20:50:01 | INFO     | ai.brain | 🧠 IA: OpenAI API não configurada - usando respostas pré-definidas
+2025-12-06 20:50:01 | INFO     | ai.brain | 🧠 IA: Motor de IA inicializado
+2025-12-06 20:50:01 | INFO     | core.jarvis | 🔧 SISTEMA: Executando testes do sistema...
+2025-12-06 20:50:01 | INFO     | core.voice_synthesis | 🎤 VOZ: Falando: 'Boa noite. JARVIS está online e pronto para atendê-lo.'
+2025-12-06 20:50:09 | INFO     | core.jarvis | 🔧 SISTEMA: ✅ Todos os componentes inicializados com sucesso
+2025-12-06 20:50:09 | INFO     | core.jarvis | 🔧 SISTEMA: 🏠 Inicializando automação residencial...
+2025-12-06 20:50:09 | INFO     | modules.home_automation | 🏠 AUTOMAÇÃO: Sistema de automação inicializado
+2025-12-06 20:50:09 | INFO     | core.jarvis | 🔧 SISTEMA: 🧠 Inicializando sistema de aprendizado...
+2025-12-06 20:50:09 | INFO     | ai.learning | 🧠 IA: Carregadas 0 preferências
+2025-12-06 20:50:09 | INFO     | ai.learning | 🧠 IA: Sistema de aprendizado inicializado
+2025-12-06 20:50:09 | INFO     | core.jarvis | 🔧 SISTEMA: 🌐 Inicializando interface web...
+2025-12-06 20:50:09 | INFO     | web.app | 🔧 SISTEMA: Interface web inicializada
+2025-12-06 20:50:09 | INFO     | web.app | 🔧 SISTEMA: Iniciando servidor web em http://localhost:5000
+2025-12-06 20:50:09 | INFO     | core.jarvis | 🔧 SISTEMA: ✅ Todos os módulos inicializados!
+2025-12-06 20:50:09 | INFO     | core.jarvis | 🔧 SISTEMA: 🟢 JARVIS está online e operacional!
+2025-12-06 20:53:52 | INFO     | core.config_manager | Configurações carregadas com sucesso
+2025-12-06 20:53:52 | WARNING  | core.config_manager | OpenAI API key não configurada - funcionalidade de IA limitada
+2025-12-06 20:53:52 | INFO     | __main__ | Inicializando JARVIS...
+2025-12-06 20:53:52 | INFO     | core.jarvis | 🔧 SISTEMA: JARVIS criado
+2025-12-06 20:53:52 | INFO     | core.jarvis | 🔧 SISTEMA: Inicializando componentes do JARVIS...
+2025-12-06 20:53:52 | INFO     | core.jarvis | 🔧 SISTEMA: 🔊 Inicializando sistema de síntese de voz...
+2025-12-06 20:53:52 | INFO     | comtypes.client._code_cache | Imported existing <module 'comtypes.gen' from 'C:\\Python313\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-12-06 20:53:52 | INFO     | comtypes.client._code_cache | Using writeable comtypes cache directory: 'C:\Python313\Lib\site-packages\comtypes\gen'
+2025-12-06 20:53:52 | INFO     | core.voice_synthesis | 🎤 VOZ: Voz configurada: Microsoft Maria Desktop - Portuguese(Brazil)
+2025-12-06 20:53:52 | INFO     | core.voice_synthesis | 🎤 VOZ: Engine de síntese inicializado com sucesso
+2025-12-06 20:53:52 | INFO     | core.jarvis | 🔧 SISTEMA: 🎤 Inicializando sistema de reconhecimento de voz...
+2025-12-06 20:53:52 | INFO     | core.voice_recognition | 🎤 VOZ: Microfone inicializado com sucesso
+2025-12-06 20:53:52 | INFO     | core.voice_recognition | 🎤 VOZ: Calibrando para ruído ambiente...
+2025-12-06 20:53:54 | INFO     | core.voice_recognition | 🎤 VOZ: Calibração concluída
+2025-12-06 20:53:54 | INFO     | core.jarvis | 🔧 SISTEMA: 🧠 Inicializando motor de IA...
+2025-12-06 20:53:54 | INFO     | ai.brain | 🧠 IA: OpenAI API não configurada - usando respostas pré-definidas
+2025-12-06 20:53:54 | INFO     | ai.brain | 🧠 IA: Motor de IA inicializado
+2025-12-06 20:53:54 | INFO     | core.jarvis | 🔧 SISTEMA: Executando testes do sistema...
+2025-12-06 20:53:54 | INFO     | core.voice_synthesis | 🎤 VOZ: Falando: 'Sistemas carregados com sucesso. JARVIS à sua disposição.'
+2025-12-06 20:54:03 | INFO     | core.jarvis | 🔧 SISTEMA: ✅ Todos os componentes inicializados com sucesso
+2025-12-06 20:54:03 | INFO     | core.jarvis | 🔧 SISTEMA: 🏠 Inicializando automação residencial...
+2025-12-06 20:54:03 | INFO     | modules.home_automation | 🏠 AUTOMAÇÃO: Sistema de automação inicializado
+2025-12-06 20:54:03 | INFO     | core.jarvis | 🔧 SISTEMA: 🧠 Inicializando sistema de aprendizado...
+2025-12-06 20:54:03 | INFO     | ai.learning | 🧠 IA: Carregadas 0 preferências
+2025-12-06 20:54:03 | INFO     | ai.learning | 🧠 IA: Sistema de aprendizado inicializado
+2025-12-06 20:54:03 | INFO     | core.jarvis | 🔧 SISTEMA: 🌐 Inicializando interface web...
+2025-12-06 20:54:03 | INFO     | web.app | 🔧 SISTEMA: Interface web inicializada
+2025-12-06 20:54:03 | INFO     | web.app | 🔧 SISTEMA: Iniciando servidor web em http://localhost:5000
+2025-12-06 20:54:03 | INFO     | core.jarvis | 🔧 SISTEMA: ✅ Todos os módulos inicializados!
+2025-12-06 20:54:03 | INFO     | core.jarvis | 🔧 SISTEMA: 🟢 JARVIS está online e operacional!
+2025-12-06 20:54:37 | INFO     | core.config_manager | Configurações carregadas com sucesso
+2025-12-06 20:54:38 | WARNING  | core.config_manager | OpenAI API key não configurada - funcionalidade de IA limitada
+2025-12-06 20:54:38 | INFO     | __main__ | Inicializando JARVIS...
+2025-12-06 20:54:38 | INFO     | core.jarvis | 🔧 SISTEMA: JARVIS criado
+2025-12-06 20:54:38 | INFO     | core.jarvis | 🔧 SISTEMA: Inicializando componentes do JARVIS...
+2025-12-06 20:54:38 | INFO     | core.jarvis | 🔧 SISTEMA: 🔊 Inicializando sistema de síntese de voz...
+2025-12-06 20:54:38 | INFO     | comtypes.client._code_cache | Imported existing <module 'comtypes.gen' from 'C:\\Python313\\Lib\\site-packages\\comtypes\\gen\\__init__.py'>
+2025-12-06 20:54:38 | INFO     | comtypes.client._code_cache | Using writeable comtypes cache directory: 'C:\Python313\Lib\site-packages\comtypes\gen'
+2025-12-06 20:54:38 | INFO     | core.voice_synthesis | 🎤 VOZ: Voz configurada: Microsoft Maria Desktop - Portuguese(Brazil)
+2025-12-06 20:54:38 | INFO     | core.voice_synthesis | 🎤 VOZ: Engine de síntese inicializado com sucesso
+2025-12-06 20:54:38 | INFO     | core.jarvis | 🔧 SISTEMA: 🎤 Inicializando sistema de reconhecimento de voz...
+2025-12-06 20:54:38 | INFO     | core.voice_recognition | 🎤 VOZ: Microfone inicializado com sucesso
+2025-12-06 20:54:38 | INFO     | core.voice_recognition | 🎤 VOZ: Calibrando para ruído ambiente...
+2025-12-06 20:54:40 | INFO     | core.voice_recognition | 🎤 VOZ: Calibração concluída
+2025-12-06 20:54:40 | INFO     | core.jarvis | 🔧 SISTEMA: 🧠 Inicializando motor de IA...
+2025-12-06 20:54:40 | INFO     | ai.brain | 🧠 IA: OpenAI API não configurada - usando respostas pré-definidas
+2025-12-06 20:54:40 | INFO     | ai.brain | 🧠 IA: Motor de IA inicializado
+2025-12-06 20:54:40 | INFO     | core.jarvis | 🔧 SISTEMA: Executando testes do sistema...
+2025-12-06 20:54:40 | INFO     | core.voice_synthesis | 🎤 VOZ: Falando: 'JARVIS inicializado e operacional. Todos os sistemas funcionando normalmente.'
+2025-12-06 20:54:49 | INFO     | core.jarvis | 🔧 SISTEMA: ✅ Todos os componentes inicializados com sucesso
+2025-12-06 20:54:49 | INFO     | core.jarvis | 🔧 SISTEMA: 🏠 Inicializando automação residencial...
+2025-12-06 20:54:49 | INFO     | modules.home_automation | 🏠 AUTOMAÇÃO: Sistema de automação inicializado
+2025-12-06 20:54:49 | INFO     | core.jarvis | 🔧 SISTEMA: 🧠 Inicializando sistema de aprendizado...
+2025-12-06 20:54:49 | INFO     | ai.learning | 🧠 IA: Carregadas 0 preferências
+2025-12-06 20:54:49 | INFO     | ai.learning | 🧠 IA: Sistema de aprendizado inicializado
+2025-12-06 20:54:49 | INFO     | core.jarvis | 🔧 SISTEMA: 🌐 Inicializando interface web...
+2025-12-06 20:54:49 | INFO     | web.app | 🔧 SISTEMA: Interface web inicializada
+2025-12-06 20:54:49 | INFO     | web.app | 🔧 SISTEMA: Iniciando servidor web em http://localhost:5000
+2025-12-06 20:54:49 | INFO     | core.jarvis | 🔧 SISTEMA: ✅ Todos os módulos inicializados!
+2025-12-06 20:54:49 | INFO     | core.jarvis | 🔧 SISTEMA: 🟢 JARVIS está online e operacional!
+2025-12-06 20:54:52 | INFO     | web.app | 🔧 SISTEMA: Cliente conectado. Total: 1
+2025-12-06 20:55:13 | INFO     | core.jarvis | 🔧 SISTEMA: Sinal recebido: 2
+2025-12-06 20:55:16 | INFO     | ai.learning | 🧠 IA: Sistema de aprendizado finalizado
+2025-12-06 20:55:16 | INFO     | core.jarvis | 🔧 SISTEMA: Iniciando desligamento do JARVIS...
+2025-12-06 20:55:16 | INFO     | core.voice_synthesis | 🎤 VOZ: Falando: 'Até a próxima. Estarei aqui quando precisar.'
+2025-12-06 20:55:18 | INFO     | core.voice_recognition | 🎤 VOZ: Escuta interrompida
+2025-12-06 20:55:18 | INFO     | ai.brain | 🧠 IA: Motor de IA finalizado
+2025-12-06 20:55:18 | INFO     | core.voice_synthesis | 🎤 VOZ: Sistema de síntese finalizado
+2025-12-06 20:55:18 | INFO     | core.jarvis | 🔧 SISTEMA: 🔴 JARVIS desligado com sucesso
+2025-12-06 20:56:10 | INFO     | __main__ | 🔧 SISTEMA: Configurações carregadas
+2025-12-06 20:56:10 | INFO     | __main__ | 🔧 SISTEMA: 🌐 Iniciando interface web do JARVIS...
+2025-12-06 20:56:10 | ERROR    | __main__ | ❌ ERRO: Erro crítico: 'ConfigManager' object has no attribute 'get'

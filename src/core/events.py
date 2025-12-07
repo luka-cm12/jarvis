@@ -73,7 +73,7 @@ class EventManager:
             self.logger.error(f"Erro no callback do evento '{event_type}': {e}")
     
     @classmethod
-    def emit(cls, event_type, data=None):
+    def emit_event(cls, event_type, data=None):
         """Método de classe para emitir eventos facilmente"""
         instance = cls.get_instance()
         instance.emit(event_type, data)

@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J.A.R.V.I.S - Cyber Security System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Efeito de Matrix/Circuitos */
+        .circuit-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: -1;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 2px,
+                #00d4ff 2px,
+                #00d4ff 4px
+            );
+            animation: circuit-flow 20s linear infinite;
+        }
+
+        @keyframes circuit-flow {
+            0% { transform: translateX(-100%) translateY(-100%); }
+            100% { transform: translateX(100%) translateY(100%); }
+        }
+
+        /* Header JARVIS */
+        .header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #00d4ff;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #00d4ff;
+            text-shadow: 0 0 20px #00d4ff;
+            margin-bottom: 10px;
+            letter-spacing: 5px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Status Display */
+        .status-panel {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 15px;
+        }
+
+        .status-item {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid #00d4ff;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+            backdrop-filter: blur(5px);
+        }
+
+        .status-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00d4ff;
+            margin-bottom: 5px;
+        }
+
+        .status-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border: 1px solid #00d4ff;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: #00d4ff;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #00d4ff;
+            padding-bottom: 5px;
+        }
+
+        /* Input Groups */
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #00d4ff;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #ffffff;
+            font-size: 1rem;
+            min-width: 200px;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 20px;
+            border: 2px solid #00d4ff;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: #000000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            min-width: 120px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #00a8cc 0%, #007799 100%);
+            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-voice {
+            background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+            border-color: #ff4444;
+        }
+
+        .btn-voice:hover {
+            background: linear-gradient(135deg, #ff6666 0%, #ee2222 100%);
+        }
+
+        /* Results Area */
+        .results {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 200px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-y: auto;
+            max-height: 300px;
+        }
+
+        .log-entry {
+            margin-bottom: 10px;
+            padding: 5px;
+            border-left: 3px solid #00d4ff;
+            padding-left: 10px;
+        }
+
+        .log-timestamp {
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        .log-success {
+            border-left-color: #00ff00;
+            color: #ccffcc;
+        }
+
+        .log-error {
+            border-left-color: #ff0000;
+            color: #ffcccc;
+        }
+
+        .log-info {
+            border-left-color: #ffff00;
+            color: #ffffcc;
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 2rem;
+                letter-spacing: 3px;
+            }
+
+            .status-panel {
+                flex-direction: column;
+            }
+
+            .status-item {
+                min-width: auto;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .control-panel {
+                margin: 10px;
+                padding: 15px;
+            }
+        }
+
+        /* Voice Recognition Indicator */
+        .voice-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ff4444;
+            display: inline-block;
+            margin-left: 10px;
+            animation: voice-pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes voice-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+
+        .voice-indicator.listening {
+            background: #00ff00;
+        }
+
+        /* Security Score */
+        .score-circle {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 10px;
+        }
+
+        .score-progress {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(#00d4ff 0deg, #00d4ff calc(var(--score) * 3.6deg), transparent calc(var(--score) * 3.6deg));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .score-inner {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Effect -->
+    <div class="circuit-bg"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">J.A.R.V.I.S</div>
+        <div class="subtitle">Cyber Security System</div>
+    </header>
+
+    <!-- Status Panel -->
+    <div class="status-panel">
+        <div class="status-item">
+            <div class="status-value" id="system-status">🟢 ONLINE</div>
+            <div class="status-label">Status do Sistema</div>
+        </div>
+        <div class="status-item">
+            <div class="status-value" id="active-scans">0</div>
+            <div class="status-label">Scans Ativos</div>
+        </div>
+        <div class="status-item">
+            <div class="status-value" id="total-scans">0</div>
+            <div class="status-label">Total de Scans</div>
+        </div>
+        <div class="status-item">
+            <div class="score-circle">
+                <div class="score-progress" style="--score: 0">
+                    <div class="score-inner">
+                        <span id="security-score">0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="status-label">Score de Segurança</div>
+        </div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="control-panel">
+        <!-- Network Scanner -->
+        <div class="control-section">
+            <div class="section-title">🔍 Scanner de Rede</div>
+            <div class="input-group">
+                <input type="text" id="scan-target" placeholder="IP ou hostname (ex: 127.0.0.1)" value="127.0.0.1">
+                <button class="btn" onclick="startScan()">Escanear</button>
+            </div>
+        </div>
+
+        <!-- Security Assessment -->
+        <div class="control-section">
+            <div class="section-title">🛡️ Avaliação de Segurança</div>
+            <div class="input-group">
+                <button class="btn" onclick="runHardening()">Avaliar Sistema</button>
+                <button class="btn btn-voice" onclick="toggleVoiceRecognition()">
+                    🎤 Comando de Voz
+                    <span class="voice-indicator" id="voice-indicator"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div class="control-section">
+            <div class="section-title">📊 Resultados</div>
+            <div class="results" id="results-area">
+                <div class="log-entry">
+                    <div class="log-timestamp">[SYSTEM READY]</div>
+                    <div>Sistema JARVIS inicializado com sucesso!</div>
+                    <div>Aguardando comandos...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        // WebSocket Connection
+        const socket = io();
+        let isListening = false;
+        let recognition = null;
+
+        // Initialize Web Speech API
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'pt-BR';
+
+            recognition.onstart = function() {
+                isListening = true;
+                updateVoiceIndicator();
+                addLogEntry('🎤 Escutando...', 'info');
+            };
+
+            recognition.onresult = function(event) {
+                const command = event.results[0][0].transcript;
+                addLogEntry(`🎤 Comando: "${command}"`, 'info');
+                processVoiceCommand(command);
+            };
+
+            recognition.onend = function() {
+                isListening = false;
+                updateVoiceIndicator();
+            };
+
+            recognition.onerror = function(event) {
+                isListening = false;
+                updateVoiceIndicator();
+                addLogEntry('❌ Erro no reconhecimento de voz', 'error');
+            };
+        }
+
+        // Socket Events
+        socket.on('connect', function() {
+            addLogEntry('🔌 Conectado ao servidor JARVIS', 'success');
+            requestStatus();
+        });
+
+        socket.on('status_update', function(status) {
+            updateStatus(status);
+        });
+
+        socket.on('scan_result', function(data) {
+            displayScanResult(data);
+        });
+
+        socket.on('hardening_result', function(data) {
+            displayHardeningResult(data);
+        });
+
+        // Functions
+        function requestStatus() {
+            socket.emit('request_status');
+        }
+
+        function updateStatus(status) {
+            document.getElementById('system-status').textContent = status.online ? '🟢 ONLINE' : '🔴 OFFLINE';
+            document.getElementById('active-scans').textContent = status.active_scans;
+            document.getElementById('total-scans').textContent = status.total_scans;
+            
+            const score = status.security_score || 0;
+            document.getElementById('security-score').textContent = score;
+            document.querySelector('.score-progress').style.setProperty('--score', score);
+        }
+
+        function addLogEntry(message, type = 'info') {
+            const resultsArea = document.getElementById('results-area');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry log-${type}`;
+            logEntry.innerHTML = `
+                <div class="log-timestamp">[${timestamp}]</div>
+                <div>${message}</div>
+            `;
+            
+            resultsArea.appendChild(logEntry);
+            resultsArea.scrollTop = resultsArea.scrollHeight;
+        }
+
+        function startScan() {
+            const target = document.getElementById('scan-target').value.trim();
+            if (!target) {
+                addLogEntry('❌ Por favor, insira um alvo válido', 'error');
+                return;
+            }
+
+            addLogEntry(`🔍 Iniciando scan em ${target}...`, 'info');
+            
+            fetch('/api/scan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ target: target })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addLogEntry('✅ Scan iniciado com sucesso', 'success');
+                } else {
+                    addLogEntry(`❌ Erro no scan: ${data.error}`, 'error');
+                }
+            })
+            .catch(error => {
+                addLogEntry(`❌ Erro de comunicação: ${error.message}`, 'error');
+            });
+        }
+
+        function runHardening() {
+            addLogEntry('🛡️ Executando avaliação de segurança...', 'info');
+            
+            fetch('/api/hardening', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addLogEntry('✅ Avaliação iniciada com sucesso', 'success');
+                } else {
+                    addLogEntry(`❌ Erro na avaliação: ${data.error}`, 'error');
+                }
+            })
+            .catch(error => {
+                addLogEntry(`❌ Erro de comunicação: ${error.message}`, 'error');
+            });
+        }
+
+        function toggleVoiceRecognition() {
+            if (!recognition) {
+                addLogEntry('❌ Reconhecimento de voz não suportado neste navegador', 'error');
+                return;
+            }
+
+            if (isListening) {
+                recognition.stop();
+            } else {
+                recognition.start();
+            }
+        }
+
+        function updateVoiceIndicator() {
+            const indicator = document.getElementById('voice-indicator');
+            if (isListening) {
+                indicator.classList.add('listening');
+            } else {
+                indicator.classList.remove('listening');
+            }
+        }
+
+        function processVoiceCommand(command) {
+            fetch('/api/voice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ command: command })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addLogEntry(`🤖 JARVIS: ${data.response}`, 'success');
+                    
+                    // Execute action based on voice command
+                    if (data.action === 'scan') {
+                        startScan();
+                    } else if (data.action === 'hardening') {
+                        runHardening();
+                    } else if (data.action === 'status') {
+                        requestStatus();
+                    }
+                } else {
+                    addLogEntry(`❌ Erro no comando de voz: ${data.error}`, 'error');
+                }
+            })
+            .catch(error => {
+                addLogEntry(`❌ Erro de comunicação: ${error.message}`, 'error');
+            });
+        }
+
+        function displayScanResult(data) {
+            const result = data.result;
+            if (result.error) {
+                addLogEntry(`❌ Erro no scan: ${result.error}`, 'error');
+                return;
+            }
+
+            const hosts = result.hosts || [];
+            addLogEntry(`✅ Scan concluído - ${hosts.length} hosts analisados`, 'success');
+            
+            hosts.forEach(host => {
+                const ip = host.ip;
+                const ports = host.open_ports || [];
+                const status = host.status;
+                
+                addLogEntry(`📡 Host: ${ip} (${status})`, 'info');
+                if (ports.length > 0) {
+                    addLogEntry(`  └─ Portas abertas: ${ports.join(', ')}`, 'info');
+                } else {
+                    addLogEntry(`  └─ Nenhuma porta aberta detectada`, 'info');
+                }
+            });
+        }
+
+        function displayHardeningResult(data) {
+            const result = data.result;
+            if (result.error) {
+                addLogEntry(`❌ Erro na avaliação: ${result.error}`, 'error');
+                return;
+            }
+
+            const score = result.overall_score || 0;
+            const recommendations = result.recommendations || [];
+            
+            addLogEntry(`✅ Avaliação concluída - Score: ${score}/100`, 'success');
+            
+            if (score >= 80) {
+                addLogEntry('🟢 Sistema bem protegido!', 'success');
+            } else if (score >= 60) {
+                addLogEntry('🟡 Sistema parcialmente protegido', 'info');
+            } else {
+                addLogEntry('🔴 Sistema precisa de melhorias', 'error');
+            }
+            
+            if (recommendations.length > 0) {
+                addLogEntry('📋 Principais recomendações:', 'info');
+                recommendations.slice(0, 3).forEach((rec, index) => {
+                    addLogEntry(`  ${index + 1}. ${rec}`, 'info');
+                });
+            }
+        }
+
+        // Auto-update status every 30 seconds
+        setInterval(requestStatus, 30000);
+        
+        // Initialize
+        requestStatus();
+    </script>
+</body>
+</html>
