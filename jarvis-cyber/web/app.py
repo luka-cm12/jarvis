@@ -101,6 +101,61 @@ def api_hardening():
             'error': str(e)
         }), 500
 
+@app.route('/api/penetration', methods=['POST'])
+def api_penetration():
+    """API para testes de penetração ética"""
+    try:
+        data = request.get_json()
+        target = data.get('target', '127.0.0.1')
+        test_type = data.get('test_type', 'basic')
+        
+        from tools.ethical_hacker import run_ethical_penetration_test
+        
+        result = run_ethical_penetration_test(target, test_type)
+        
+        # Emitir resultado via WebSocket
+        socketio.emit('penetration_result', {
+            'target': target,
+            'test_type': test_type,
+            'result': result,
+            'timestamp': datetime.now().isoformat()
+        })
+        
+        return jsonify({
+            'success': True,
+            'result': result
+        })
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/exploit', methods=['POST'])
+def api_exploit():
+    """API para geração de payloads de exploit"""
+    try:
+        data = request.get_json()
+        vuln_type = data.get('vulnerability_type', 'sql_injection')
+        target_os = data.get('target_os', 'universal')
+        
+        from tools.ethical_hacker import EthicalHacker
+        hacker = EthicalHacker()
+        
+        result = hacker.generate_exploit_payload(vuln_type, target_os)
+        
+        return jsonify({
+            'success': True,
+            'result': result
+        })
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
 @app.route('/api/voice', methods=['POST'])
 def api_voice():
     """API para processamento de comandos de voz"""
@@ -114,6 +169,12 @@ def api_voice():
         if 'scan' in command or 'escanear' in command:
             response = "Iniciando varredura de rede..."
             action = 'scan'
+        elif 'penetração' in command or 'penetration' in command or 'hackear' in command:
+            response = "Iniciando teste de penetração ética..."
+            action = 'penetration'
+        elif 'exploit' in command or 'payload' in command:
+            response = "Gerando payload de exploit..."
+            action = 'exploit'
         elif 'segurança' in command or 'hardening' in command:
             response = "Executando avaliação de segurança..."
             action = 'hardening'

@@ -370,6 +370,40 @@
             </div>
         </div>
 
+        <!-- Ethical Penetration Testing -->
+        <div class="control-section">
+            <div class="section-title">🔴 Teste de Penetração Ética</div>
+            <div class="input-group">
+                <input type="text" id="pentest-target" placeholder="Alvo autorizado (ex: 127.0.0.1)" value="127.0.0.1">
+                <select id="pentest-type" style="padding: 12px; border: 2px solid #00d4ff; border-radius: 8px; background: rgba(0,0,0,0.5); color: #ffffff;">
+                    <option value="basic">Scan Básico</option>
+                    <option value="web">Vulnerabilidades Web</option>
+                    <option value="ssh_bruteforce">SSH Brute Force</option>
+                    <option value="network_sniff">Sniffing de Rede</option>
+                    <option value="wireless">Segurança Wi-Fi</option>
+                </select>
+                <button class="btn" onclick="startPenetrationTest()" style="background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%); border-color: #ff4444;">🔴 Iniciar Teste</button>
+            </div>
+        </div>
+
+        <!-- Exploit Generation -->
+        <div class="control-section">
+            <div class="section-title">⚡ Geração de Exploits</div>
+            <div class="input-group">
+                <select id="exploit-type" style="padding: 12px; border: 2px solid #00d4ff; border-radius: 8px; background: rgba(0,0,0,0.5); color: #ffffff;">
+                    <option value="sql_injection">SQL Injection</option>
+                    <option value="xss">Cross-Site Scripting</option>
+                    <option value="buffer_overflow">Buffer Overflow</option>
+                </select>
+                <select id="target-os" style="padding: 12px; border: 2px solid #00d4ff; border-radius: 8px; background: rgba(0,0,0,0.5); color: #ffffff;">
+                    <option value="universal">Universal</option>
+                    <option value="windows">Windows</option>
+                    <option value="linux">Linux</option>
+                </select>
+                <button class="btn" onclick="generateExploit()" style="background: linear-gradient(135deg, #ffaa00 0%, #cc8800 100%); border-color: #ffaa00;">⚡ Gerar Payload</button>
+            </div>
+        </div>
+
         <!-- Results -->
         <div class="control-section">
             <div class="section-title">📊 Resultados</div>
@@ -439,6 +473,10 @@
 
         socket.on('hardening_result', function(data) {
             displayHardeningResult(data);
+        });
+
+        socket.on('penetration_result', function(data) {
+            displayPenetrationResult(data);
         });
 
         // Functions
@@ -560,6 +598,10 @@
                     // Execute action based on voice command
                     if (data.action === 'scan') {
                         startScan();
+                    } else if (data.action === 'penetration') {
+                        startPenetrationTest();
+                    } else if (data.action === 'exploit') {
+                        generateExploit();
                     } else if (data.action === 'hardening') {
                         runHardening();
                     } else if (data.action === 'status') {
@@ -572,6 +614,131 @@
             .catch(error => {
                 addLogEntry(`❌ Erro de comunicação: ${error.message}`, 'error');
             });
+        }
+
+        function startPenetrationTest() {
+            const target = document.getElementById('pentest-target').value.trim();
+            const testType = document.getElementById('pentest-type').value;
+            
+            if (!target) {
+                addLogEntry('❌ Por favor, insira um alvo válido', 'error');
+                return;
+            }
+
+            addLogEntry(`🔴 Iniciando teste de penetração ${testType} em ${target}...`, 'info');
+            
+            fetch('/api/penetration', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    target: target,
+                    test_type: testType
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addLogEntry('✅ Teste de penetração iniciado', 'success');
+                } else {
+                    addLogEntry(`❌ Erro no teste: ${data.error}`, 'error');
+                }
+            })
+            .catch(error => {
+                addLogEntry(`❌ Erro de comunicação: ${error.message}`, 'error');
+            });
+        }
+
+        function generateExploit() {
+            const exploitType = document.getElementById('exploit-type').value;
+            const targetOs = document.getElementById('target-os').value;
+            
+            addLogEntry(`⚡ Gerando payload ${exploitType} para ${targetOs}...`, 'info');
+            
+            fetch('/api/exploit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    vulnerability_type: exploitType,
+                    target_os: targetOs
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    addLogEntry('✅ Payload gerado com sucesso', 'success');
+                    displayExploitResult(data.result);
+                } else {
+                    addLogEntry(`❌ Erro na geração: ${data.error}`, 'error');
+                }
+            })
+            .catch(error => {
+                addLogEntry(`❌ Erro de comunicação: ${error.message}`, 'error');
+            });
+        }
+
+        function displayPenetrationResult(data) {
+            const result = data.result;
+            if (result.error) {
+                addLogEntry(`❌ Erro no teste: ${result.error}`, 'error');
+                return;
+            }
+
+            addLogEntry(`🔴 Teste de penetração ${data.test_type} concluído`, 'success');
+            
+            if (result.open_ports) {
+                addLogEntry(`📡 Portas abertas encontradas: ${result.open_ports.length}`, 'info');
+                result.open_ports.slice(0, 5).forEach(port => {
+                    const service = result.services && result.services[port] ? result.services[port] : 'Unknown';
+                    addLogEntry(`  └─ Porta ${port}: ${service}`, 'info');
+                });
+            }
+            
+            if (result.vulnerabilities && result.vulnerabilities.length > 0) {
+                addLogEntry(`🚨 VULNERABILIDADES CRÍTICAS: ${result.vulnerabilities.length}`, 'error');
+                result.vulnerabilities.forEach(vuln => {
+                    addLogEntry(`  🔴 ${vuln.vulnerability || vuln.type} (${vuln.severity})`, 'error');
+                });
+            }
+            
+            if (result.successful_logins && result.successful_logins.length > 0) {
+                addLogEntry(`🔓 Credenciais fracas encontradas: ${result.successful_logins.length}`, 'error');
+                result.successful_logins.forEach(login => {
+                    addLogEntry(`  └─ User: ${login.username} | Pass: ${login.password}`, 'error');
+                });
+            }
+            
+            if (result.networks_found) {
+                addLogEntry(`📶 Redes Wi-Fi encontradas: ${result.networks_found.length}`, 'info');
+                result.networks_found.forEach(network => {
+                    const security = network.security || 'Unknown';
+                    const risk = security === 'None' ? '🔴 ALTO RISCO' : security === 'WEP' ? '🟡 RISCO MÉDIO' : '🟢 SEGURO';
+                    addLogEntry(`  └─ ${network.ssid}: ${security} ${risk}`, security === 'None' ? 'error' : 'info');
+                });
+            }
+        }
+
+        function displayExploitResult(result) {
+            if (result.error) {
+                addLogEntry(`❌ Erro na geração: ${result.error}`, 'error');
+                return;
+            }
+            
+            addLogEntry(`⚡ Payload ${result.vulnerability} gerado:`, 'success');
+            
+            if (result.payloads) {
+                Object.keys(result.payloads).forEach(key => {
+                    if (key !== 'description') {
+                        addLogEntry(`  ${key}: ${result.payloads[key]}`, 'info');
+                    }
+                });
+                addLogEntry(`💡 ${result.payloads.description}`, 'info');
+            }
+            
+            addLogEntry('⚠️  AVISO: Use apenas em ambiente autorizado!', 'error');
         }
 
         function displayScanResult(data) {
