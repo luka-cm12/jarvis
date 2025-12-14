@@ -101,6 +101,36 @@ def api_hardening():
             'error': str(e)
         }), 500
 
+@app.route('/api/assistant', methods=['POST'])
+def api_assistant():
+    """API do assistente virtual JARVIS"""
+    try:
+        data = request.get_json()
+        command = data.get('command', '')
+        user_name = data.get('user_name', 'Sir')
+        
+        from assistant.jarvis_ai import process_jarvis_command
+        
+        result = process_jarvis_command(command, user_name)
+        
+        # Emitir resultado via WebSocket
+        socketio.emit('assistant_response', {
+            'command': command,
+            'result': result,
+            'timestamp': datetime.now().isoformat()
+        })
+        
+        return jsonify({
+            'success': True,
+            'result': result
+        })
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
 @app.route('/api/penetration', methods=['POST'])
 def api_penetration():
     """API para testes de penetração ética"""

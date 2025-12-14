@@ -351,6 +351,18 @@
     <div class="control-panel">
         <!-- Network Scanner -->
         <div class="control-section">
+            <div class="section-title">🤖 Assistente Virtual JARVIS</div>
+            <div class="input-group">
+                <input type="text" id="assistant-command" placeholder='Exemplo: "JARVIS, criar um website"' style="flex: 2;">
+                <button class="btn" onclick="sendAssistantCommand()" style="background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%); border-color: #00ff88;">🤖 Executar</button>
+            </div>
+            <div style="font-size: 0.85rem; opacity: 0.7; margin-top: 10px;">
+                💡 Experimente: "criar website", "criar API", "criar script", "ajuda", "status"
+            </div>
+        </div>
+
+        <!-- Network Scanner -->
+        <div class="control-section">
             <div class="section-title">🔍 Scanner de Rede</div>
             <div class="input-group">
                 <input type="text" id="scan-target" placeholder="IP ou hostname (ex: 127.0.0.1)" value="127.0.0.1">
@@ -410,8 +422,9 @@
             <div class="results" id="results-area">
                 <div class="log-entry">
                     <div class="log-timestamp">[SYSTEM READY]</div>
-                    <div>Sistema JARVIS inicializado com sucesso!</div>
-                    <div>Aguardando comandos...</div>
+                    <div>🤖 JARVIS: Bom dia, Sir. Sistema inicializado com sucesso!</div>
+                    <div>💡 Posso ajudá-lo a criar websites, APIs, apps, scripts e muito mais.</div>
+                    <div>🎤 Use comandos de voz ou digite diretamente no assistente virtual.</div>
                 </div>
             </div>
         </div>
@@ -479,6 +492,10 @@
             displayPenetrationResult(data);
         });
 
+        socket.on('assistant_response', function(data) {
+            displayAssistantResponse(data);
+        });
+
         // Functions
         function requestStatus() {
             socket.emit('request_status');
@@ -507,6 +524,70 @@
             
             resultsArea.appendChild(logEntry);
             resultsArea.scrollTop = resultsArea.scrollHeight;
+        }
+
+        function sendAssistantCommand() {
+            const command = document.getElementById('assistant-command').value.trim();
+            
+            if (!command) {
+                addLogEntry('❌ Por favor, digite um comando para o JARVIS', 'error');
+                return;
+            }
+
+            addLogEntry(`🤖 Você: ${command}`, 'info');
+            addLogEntry('🤖 JARVIS: Processando...', 'info');
+            
+            fetch('/api/assistant', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    command: command,
+                    user_name: 'Sir'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    displayAssistantResponse({result: data.result, command: command});
+                } else {
+                    addLogEntry(`❌ Erro: ${data.error}`, 'error');
+                }
+            })
+            .catch(error => {
+                addLogEntry(`❌ Erro de comunicação: ${error.message}`, 'error');
+            });
+        }
+
+        function displayAssistantResponse(data) {
+            const result = data.result;
+            
+            // Mostrar resposta do JARVIS
+            addLogEntry(`🤖 JARVIS: ${result.response}`, 'success');
+            
+            // Mostrar informações adicionais baseado na ação
+            if (result.action === 'project_created') {
+                addLogEntry(`✅ Projeto criado em: ${result.path}`, 'success');
+                if (result.next_steps) {
+                    addLogEntry('📋 Próximos passos:', 'info');
+                    result.next_steps.forEach(step => {
+                        addLogEntry(`  • ${step}`, 'info');
+                    });
+                }
+            } else if (result.action === 'file_created') {
+                addLogEntry(`📄 Arquivo criado: ${result.file}`, 'success');
+            } else if (result.action === 'status_report') {
+                // Status já está na resposta
+            } else if (result.action === 'clarification_needed' && result.suggestions) {
+                addLogEntry('💡 Sugestões:', 'info');
+                result.suggestions.forEach(sug => {
+                    addLogEntry(`  • ${sug}`, 'info');
+                });
+            }
+            
+            // Limpar campo de entrada
+            document.getElementById('assistant-command').value = '';
         }
 
         function startScan() {
@@ -606,6 +687,9 @@
                         runHardening();
                     } else if (data.action === 'status') {
                         requestStatus();
+                    } else if (data.action === 'assistant') {
+                        document.getElementById('assistant-command').value = command;
+                        sendAssistantCommand();
                     }
                 } else {
                     addLogEntry(`❌ Erro no comando de voz: ${data.error}`, 'error');
