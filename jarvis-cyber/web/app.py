@@ -246,9 +246,34 @@ def update_status_loop():
         socketio.emit('status_update', system_status)
 
 if __name__ == '__main__':
-    print("🚀 Iniciando JARVIS Web Interface...")
-    print("📱 Acesse: http://localhost:5000")
-    print("💻 Compatível com Desktop e Mobile")
+    import socket
+    
+    # Obter IP local
+    hostname = socket.gethostname()
+    local_ip = socket.gethostbyname(hostname)
+    
+    print("=" * 70)
+    print("🚀 JARVIS Web Interface Iniciado!")
+    print("=" * 70)
+    print()
+    print("💻 ACESSO LOCAL:")
+    print(f"   http://localhost:5000")
+    print(f"   http://127.0.0.1:5000")
+    print()
+    print("📱 ACESSO PELO CELULAR:")
+    print(f"   http://{local_ip}:5000")
+    print()
+    print("🌐 COMPATÍVEL:")
+    print("   ✅ Desktop (Windows, Mac, Linux)")
+    print("   ✅ Mobile (Android, iOS)")
+    print("   ✅ Tablets")
+    print()
+    print("💡 DICA:")
+    print(f"   1. Conecte seu celular na MESMA rede Wi-Fi")
+    print(f"   2. Abra o navegador do celular")
+    print(f"   3. Digite: http://{local_ip}:5000")
+    print()
+    print("=" * 70)
     
     # Iniciar thread de atualização de status
     status_thread = threading.Thread(target=update_status_loop, daemon=True)

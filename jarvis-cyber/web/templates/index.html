@@ -2,8 +2,9 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>J.A.R.V.I.S - Cyber Security System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>J.A.R.V.I.S - AI Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -11,877 +12,973 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-            color: #ffffff;
-            min-height: 100vh;
-            overflow-x: hidden;
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #0099cc;
+            --background-dark: #0a0e27;
+            --background-darker: #050816;
+            --background-light: #1a1f3a;
+            --text-color: #e0e0e0;
+            --text-muted: #8899aa;
+            --success-color: #00ff88;
+            --danger-color: #ff3366;
+            --border-color: rgba(0, 212, 255, 0.3);
         }
 
-        /* Efeito de Matrix/Circuitos */
-        .circuit-bg {
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: var(--background-darker);
+            color: var(--text-color);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .animated-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            opacity: 0.1;
             z-index: -1;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 2px,
-                #00d4ff 2px,
-                #00d4ff 4px
-            );
-            animation: circuit-flow 20s linear infinite;
+            background: radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(0, 153, 204, 0.05) 0%, transparent 50%),
+                        linear-gradient(135deg, var(--background-darker) 0%, var(--background-dark) 100%);
+        }
+
+        .circuit-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.05;
+            background-image: repeating-linear-gradient(90deg, transparent, transparent 79px, var(--primary-color) 79px, var(--primary-color) 81px),
+                              repeating-linear-gradient(0deg, transparent, transparent 79px, var(--primary-color) 79px, var(--primary-color) 81px);
+            animation: circuit-flow 30s linear infinite;
         }
 
         @keyframes circuit-flow {
-            0% { transform: translateX(-100%) translateY(-100%); }
-            100% { transform: translateX(100%) translateY(100%); }
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(80px, 80px); }
         }
 
-        /* Header JARVIS */
         .header {
-            text-align: center;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            border-bottom: 2px solid #00d4ff;
-        }
-
-        .logo {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #00d4ff;
-            text-shadow: 0 0 20px #00d4ff;
-            margin-bottom: 10px;
-            letter-spacing: 5px;
-        }
-
-        .subtitle {
-            font-size: 1rem;
-            opacity: 0.8;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        /* Status Display */
-        .status-panel {
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 30px;
             display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            padding: 20px;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.1);
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
             gap: 15px;
         }
 
-        .status-item {
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid #00d4ff;
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            flex: 1;
-            min-width: 200px;
-            backdrop-filter: blur(5px);
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--primary-color);
+            text-shadow: 0 0 20px var(--primary-color);
+            letter-spacing: 4px;
         }
 
-        .status-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #00d4ff;
-            margin-bottom: 5px;
-        }
-
-        .status-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        /* Control Panel */
-        .control-panel {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            border: 1px solid #00d4ff;
-            backdrop-filter: blur(10px);
-        }
-
-        .control-section {
-            margin-bottom: 30px;
-        }
-
-        .section-title {
-            font-size: 1.3rem;
-            color: #00d4ff;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #00d4ff;
-            padding-bottom: 5px;
-        }
-
-        /* Input Groups */
-        .input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #00d4ff;
-            border-radius: 8px;
-            background: rgba(0, 0, 0, 0.5);
-            color: #ffffff;
-            font-size: 1rem;
-            min-width: 200px;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 12px 20px;
-            border: 2px solid #00d4ff;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
-            color: #000000;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            min-width: 120px;
-        }
-
-        .btn:hover {
-            background: linear-gradient(135deg, #00a8cc 0%, #007799 100%);
-            box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn-voice {
-            background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
-            border-color: #ff4444;
-        }
-
-        .btn-voice:hover {
-            background: linear-gradient(135deg, #ff6666 0%, #ee2222 100%);
-        }
-
-        /* Results Area */
-        .results {
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 15px;
-            min-height: 200px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            overflow-y: auto;
-            max-height: 300px;
-        }
-
-        .log-entry {
-            margin-bottom: 10px;
-            padding: 5px;
-            border-left: 3px solid #00d4ff;
-            padding-left: 10px;
-        }
-
-        .log-timestamp {
-            color: #888;
-            font-size: 0.8rem;
-        }
-
-        .log-success {
-            border-left-color: #00ff00;
-            color: #ccffcc;
-        }
-
-        .log-error {
-            border-left-color: #ff0000;
-            color: #ffcccc;
-        }
-
-        .log-info {
-            border-left-color: #ffff00;
-            color: #ffffcc;
-        }
-
-        /* Loading Animation */
-        .loading {
-            display: inline-block;
-            animation: pulse 1.5s ease-in-out infinite;
+        .logo-pulse {
+            width: 12px;
+            height: 12px;
+            background: var(--success-color);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--success-color);
+            animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
         }
 
-        /* Responsive Design */
+        .header-btn {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--border-color);
+            color: var(--primary-color);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            background: rgba(0, 212, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .main-layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .new-chat-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            color: #000;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+        }
+
+        .new-chat-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .sidebar-section {
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 5px;
+            border: 1px solid transparent;
+        }
+
+        .menu-item:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--border-color);
+        }
+
+        .menu-item.active {
+            background: rgba(0, 212, 255, 0.15);
+            border-color: var(--primary-color);
+        }
+
+        .menu-icon {
+            font-size: 1.2rem;
+        }
+
+        .menu-label {
+            flex: 1;
+            font-size: 0.9rem;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            scroll-behavior: smooth;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        .message {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            animation: messageSlideIn 0.4s ease;
+        }
+
+        @keyframes messageSlideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .user-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .assistant-avatar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .message-content {
+            flex: 1;
+            max-width: 800px;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .message-author {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .message-text {
+            background: rgba(26, 31, 58, 0.6);
+            padding: 15px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .message.user .message-text {
+            background: rgba(102, 126, 234, 0.15);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .message.assistant .message-text {
+            background: rgba(0, 212, 255, 0.08);
+            border-color: var(--border-color);
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 15px 20px;
+        }
+
+        .typing-indicator.active {
+            display: flex;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            animation: typingBounce 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .input-container {
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-color);
+            padding: 20px 30px;
+        }
+
+        .input-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .input-box {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            background: var(--background-light);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+
+        .input-box:focus-within {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .input-field {
+            flex: 1;
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 0.95rem;
+            resize: none;
+            max-height: 200px;
+            min-height: 24px;
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.5;
+        }
+
+        .input-field:focus {
+            outline: none;
+        }
+
+        .input-field::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .input-btn:hover {
+            color: var(--primary-color);
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .quick-action {
+            background: rgba(0, 212, 255, 0.08);
+            border: 1px solid var(--border-color);
+            color: var(--primary-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-action:hover {
+            background: rgba(0, 212, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            text-align: center;
+            min-height: 400px;
+        }
+
+        .welcome-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .welcome-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .welcome-subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+
+        .feature-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: rgba(26, 31, 58, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        .feature-description {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
         @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: 0;
+                height: 100vh;
+                z-index: 1000;
+            }
+
+            .sidebar.open {
+                transform: translateX(280px);
+            }
+
+            .header {
+                padding: 12px 20px;
+            }
+
             .logo {
-                font-size: 2rem;
-                letter-spacing: 3px;
+                font-size: 1.4rem;
             }
 
-            .status-panel {
-                flex-direction: column;
+            .chat-messages {
+                padding: 20px 15px;
             }
 
-            .status-item {
-                min-width: auto;
-            }
-
-            .input-group {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
-
-            .control-panel {
-                margin: 10px;
+            .input-container {
                 padding: 15px;
             }
+
+            .feature-cards {
+                grid-template-columns: 1fr;
+            }
         }
 
-        /* Voice Recognition Indicator */
-        .voice-indicator {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #ff4444;
-            display: inline-block;
-            margin-left: 10px;
-            animation: voice-pulse 1s ease-in-out infinite;
-        }
+        @media (max-width: 480px) {
+            .header-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
 
-        @keyframes voice-pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.7; }
-        }
+            .welcome-title {
+                font-size: 1.5rem;
+            }
 
-        .voice-indicator.listening {
-            background: #00ff00;
-        }
-
-        /* Security Score */
-        .score-circle {
-            position: relative;
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 10px;
-        }
-
-        .score-progress {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: conic-gradient(#00d4ff 0deg, #00d4ff calc(var(--score) * 3.6deg), transparent calc(var(--score) * 3.6deg));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .score-inner {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
+            .input-field {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Background Effect -->
-    <div class="circuit-bg"></div>
+    <div class="animated-bg"></div>
+    <div class="circuit-lines"></div>
 
-    <!-- Header -->
     <header class="header">
-        <div class="logo">J.A.R.V.I.S</div>
-        <div class="subtitle">Cyber Security System</div>
+        <div class="logo-container">
+            <button class="header-btn" id="menuToggle" style="display: none;">☰</button>
+            <div class="logo">J.A.R.V.I.S</div>
+            <div class="logo-pulse"></div>
+        </div>
+        <div class="header-actions">
+            <button class="header-btn" id="voiceBtn">🎤</button>
+        </div>
     </header>
 
-    <!-- Status Panel -->
-    <div class="status-panel">
-        <div class="status-item">
-            <div class="status-value" id="system-status">🟢 ONLINE</div>
-            <div class="status-label">Status do Sistema</div>
-        </div>
-        <div class="status-item">
-            <div class="status-value" id="active-scans">0</div>
-            <div class="status-label">Scans Ativos</div>
-        </div>
-        <div class="status-item">
-            <div class="status-value" id="total-scans">0</div>
-            <div class="status-label">Total de Scans</div>
-        </div>
-        <div class="status-item">
-            <div class="score-circle">
-                <div class="score-progress" style="--score: 0">
-                    <div class="score-inner">
-                        <span id="security-score">0</span>
+    <div class="main-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button class="new-chat-btn" id="newChatBtn">+ Nova Conversa</button>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="menu-item active" data-feature="assistant">
+                    <span class="menu-icon">💬</span>
+                    <span class="menu-label">Chat</span>
+                </div>
+                <div class="menu-item" data-feature="scanner">
+                    <span class="menu-icon">🔍</span>
+                    <span class="menu-label">Scanner</span>
+                </div>
+                <div class="menu-item" data-feature="security">
+                    <span class="menu-icon">🔒</span>
+                    <span class="menu-label">Segurança</span>
+                </div>
+                <div class="menu-item" data-feature="projects">
+                    <span class="menu-icon">📁</span>
+                    <span class="menu-label">Projetos</span>
+                </div>
+            </div>
+        </aside>
+
+        <main class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="welcome-screen" id="welcomeScreen">
+                    <div class="welcome-icon">🤖</div>
+                    <h1 class="welcome-title">J.A.R.V.I.S</h1>
+                    <p class="welcome-subtitle">Como posso ajudá-lo?</p>
+
+                    <div class="feature-cards">
+                        <div class="feature-card" onclick="sendQuickMessage('Scan')">
+                            <div class="feature-icon">🔍</div>
+                            <div class="feature-title">Scanner</div>
+                        </div>
+                        <div class="feature-card" onclick="sendQuickMessage('Criar website')">
+                            <div class="feature-icon">🚀</div>
+                            <div class="feature-title">Projetos</div>
+                        </div>
+                        <div class="feature-card" onclick="sendQuickMessage('Segurança')">
+                            <div class="feature-icon">🛡️</div>
+                            <div class="feature-title">Segurança</div>
+                        </div>
+                        <div class="feature-card" onclick="sendQuickMessage('Status')">
+                            <div class="feature-icon">📊</div>
+                            <div class="feature-title">Status</div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="status-label">Score de Segurança</div>
-        </div>
-    </div>
 
-    <!-- Control Panel -->
-    <div class="control-panel">
-        <!-- Network Scanner -->
-        <div class="control-section">
-            <div class="section-title">🤖 Assistente Virtual JARVIS</div>
-            <div class="input-group">
-                <input type="text" id="assistant-command" placeholder='Exemplo: "JARVIS, criar um website"' style="flex: 2;">
-                <button class="btn" onclick="sendAssistantCommand()" style="background: linear-gradient(135deg, #00ff88 0%, #00cc66 100%); border-color: #00ff88;">🤖 Executar</button>
-            </div>
-            <div style="font-size: 0.85rem; opacity: 0.7; margin-top: 10px;">
-                💡 Experimente: "criar website", "criar API", "criar script", "ajuda", "status"
-            </div>
-        </div>
+            <div class="input-container">
+                <div class="quick-actions">
+                    <button class="quick-action" onclick="sendQuickMessage('Status')">📊 Status</button>
+                    <button class="quick-action" onclick="sendQuickMessage('Scan')">🔍 Scan</button>
+                    <button class="quick-action" onclick="sendQuickMessage('Website')">🌐 Website</button>
+                    <button class="quick-action" onclick="sendQuickMessage('Segurança')">🔒 Segurança</button>
+                </div>
 
-        <!-- Network Scanner -->
-        <div class="control-section">
-            <div class="section-title">🔍 Scanner de Rede</div>
-            <div class="input-group">
-                <input type="text" id="scan-target" placeholder="IP ou hostname (ex: 127.0.0.1)" value="127.0.0.1">
-                <button class="btn" onclick="startScan()">Escanear</button>
-            </div>
-        </div>
-
-        <!-- Security Assessment -->
-        <div class="control-section">
-            <div class="section-title">🛡️ Avaliação de Segurança</div>
-            <div class="input-group">
-                <button class="btn" onclick="runHardening()">Avaliar Sistema</button>
-                <button class="btn btn-voice" onclick="toggleVoiceRecognition()">
-                    🎤 Comando de Voz
-                    <span class="voice-indicator" id="voice-indicator"></span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Ethical Penetration Testing -->
-        <div class="control-section">
-            <div class="section-title">🔴 Teste de Penetração Ética</div>
-            <div class="input-group">
-                <input type="text" id="pentest-target" placeholder="Alvo autorizado (ex: 127.0.0.1)" value="127.0.0.1">
-                <select id="pentest-type" style="padding: 12px; border: 2px solid #00d4ff; border-radius: 8px; background: rgba(0,0,0,0.5); color: #ffffff;">
-                    <option value="basic">Scan Básico</option>
-                    <option value="web">Vulnerabilidades Web</option>
-                    <option value="ssh_bruteforce">SSH Brute Force</option>
-                    <option value="network_sniff">Sniffing de Rede</option>
-                    <option value="wireless">Segurança Wi-Fi</option>
-                </select>
-                <button class="btn" onclick="startPenetrationTest()" style="background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%); border-color: #ff4444;">🔴 Iniciar Teste</button>
-            </div>
-        </div>
-
-        <!-- Exploit Generation -->
-        <div class="control-section">
-            <div class="section-title">⚡ Geração de Exploits</div>
-            <div class="input-group">
-                <select id="exploit-type" style="padding: 12px; border: 2px solid #00d4ff; border-radius: 8px; background: rgba(0,0,0,0.5); color: #ffffff;">
-                    <option value="sql_injection">SQL Injection</option>
-                    <option value="xss">Cross-Site Scripting</option>
-                    <option value="buffer_overflow">Buffer Overflow</option>
-                </select>
-                <select id="target-os" style="padding: 12px; border: 2px solid #00d4ff; border-radius: 8px; background: rgba(0,0,0,0.5); color: #ffffff;">
-                    <option value="universal">Universal</option>
-                    <option value="windows">Windows</option>
-                    <option value="linux">Linux</option>
-                </select>
-                <button class="btn" onclick="generateExploit()" style="background: linear-gradient(135deg, #ffaa00 0%, #cc8800 100%); border-color: #ffaa00;">⚡ Gerar Payload</button>
-            </div>
-        </div>
-
-        <!-- Results -->
-        <div class="control-section">
-            <div class="section-title">📊 Resultados</div>
-            <div class="results" id="results-area">
-                <div class="log-entry">
-                    <div class="log-timestamp">[SYSTEM READY]</div>
-                    <div>🤖 JARVIS: Bom dia, Sir. Sistema inicializado com sucesso!</div>
-                    <div>💡 Posso ajudá-lo a criar websites, APIs, apps, scripts e muito mais.</div>
-                    <div>🎤 Use comandos de voz ou digite diretamente no assistente virtual.</div>
+                <div class="input-wrapper">
+                    <div class="input-box">
+                        <textarea 
+                            class="input-field" 
+                            id="messageInput" 
+                            placeholder="Digite sua mensagem..."
+                            rows="1"
+                        ></textarea>
+                        <div class="input-actions">
+                            <button class="input-btn" id="voiceInputBtn">🎤</button>
+                            <button class="send-btn" id="sendBtn">Enviar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://cdn.socket.io/4.0.1/socket.io.min.js"></script>
     <script>
-        // WebSocket Connection
-        const socket = io();
-        let isListening = false;
-        let recognition = null;
+        let socket;
+        let messageHistory = [];
 
-        // Initialize Web Speech API
-        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-            recognition.continuous = false;
-            recognition.interimResults = false;
-            recognition.lang = 'pt-BR';
+        try {
+            socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+            socket.on('connect', () => console.log('Conectado'));
+            socket.on('scan_result', data => addMessage('assistant', 'Scan', formatScanResult(data)));
+            socket.on('hardening_result', data => addMessage('assistant', 'Segurança', formatHardeningResult(data)));
+        } catch (e) {}
 
-            recognition.onstart = function() {
-                isListening = true;
-                updateVoiceIndicator();
-                addLogEntry('🎤 Escutando...', 'info');
-            };
+        const messageInput = document.getElementById('messageInput');
+        messageInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
 
-            recognition.onresult = function(event) {
-                const command = event.results[0][0].transcript;
-                addLogEntry(`🎤 Comando: "${command}"`, 'info');
-                processVoiceCommand(command);
-            };
+        document.getElementById('sendBtn').addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', e => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
 
-            recognition.onend = function() {
-                isListening = false;
-                updateVoiceIndicator();
-            };
-
-            recognition.onerror = function(event) {
-                isListening = false;
-                updateVoiceIndicator();
-                addLogEntry('❌ Erro no reconhecimento de voz', 'error');
-            };
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+            document.getElementById('welcomeScreen').style.display = 'none';
+            addMessage('user', 'Você', message);
+            messageInput.value = '';
+            messageInput.style.height = 'auto';
+            processCommand(message);
         }
 
-        // Socket Events
-        socket.on('connect', function() {
-            addLogEntry('🔌 Conectado ao servidor JARVIS', 'success');
-            requestStatus();
-        });
-
-        socket.on('status_update', function(status) {
-            updateStatus(status);
-        });
-
-        socket.on('scan_result', function(data) {
-            displayScanResult(data);
-        });
-
-        socket.on('hardening_result', function(data) {
-            displayHardeningResult(data);
-        });
-
-        socket.on('penetration_result', function(data) {
-            displayPenetrationResult(data);
-        });
-
-        socket.on('assistant_response', function(data) {
-            displayAssistantResponse(data);
-        });
-
-        // Functions
-        function requestStatus() {
-            socket.emit('request_status');
+        function sendQuickMessage(msg) {
+            messageInput.value = msg;
+            sendMessage();
         }
 
-        function updateStatus(status) {
-            document.getElementById('system-status').textContent = status.online ? '🟢 ONLINE' : '🔴 OFFLINE';
-            document.getElementById('active-scans').textContent = status.active_scans;
-            document.getElementById('total-scans').textContent = status.total_scans;
-            
-            const score = status.security_score || 0;
-            document.getElementById('security-score').textContent = score;
-            document.querySelector('.score-progress').style.setProperty('--score', score);
-        }
-
-        function addLogEntry(message, type = 'info') {
-            const resultsArea = document.getElementById('results-area');
-            const timestamp = new Date().toLocaleTimeString();
-            
-            const logEntry = document.createElement('div');
-            logEntry.className = `log-entry log-${type}`;
-            logEntry.innerHTML = `
-                <div class="log-timestamp">[${timestamp}]</div>
-                <div>${message}</div>
+        function addMessage(type, author, content) {
+            const container = document.getElementById('chatMessages');
+            const time = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+            const div = document.createElement('div');
+            div.className = `message ${type}`;
+            div.innerHTML = `
+                <div class="message-avatar ${type}-avatar">${type === 'user' ? '👤' : '🤖'}</div>
+                <div class="message-content">
+                    <div class="message-header">
+                        <span class="message-author">${author}</span>
+                        <span class="message-time">${time}</span>
+                    </div>
+                    <div class="message-text">${content}</div>
+                </div>
             `;
-            
-            resultsArea.appendChild(logEntry);
-            resultsArea.scrollTop = resultsArea.scrollHeight;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
         }
 
-        function sendAssistantCommand() {
-            const command = document.getElementById('assistant-command').value.trim();
-            
-            if (!command) {
-                addLogEntry('❌ Por favor, digite um comando para o JARVIS', 'error');
+        function showTyping() {
+            const div = document.createElement('div');
+            div.className = 'typing-indicator active';
+            div.id = 'typing';
+            div.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+            document.getElementById('chatMessages').appendChild(div);
+        }
+
+        function hideTyping() {
+            const el = document.getElementById('typing');
+            if (el) el.remove();
+        }
+
+        async function processCommand(cmd) {
+            showTyping();
+            const lower = cmd.toLowerCase();
+
+            // Status
+            if (lower.includes('status')) {
+                setTimeout(() => {
+                    hideTyping();
+                    addMessage('assistant', 'JARVIS', `
+                        🟢 <strong>Sistema OK</strong><br><br>
+                        ✅ Tudo funcionando normalmente
+                    `);
+                }, 800);
                 return;
             }
 
-            addLogEntry(`🤖 Você: ${command}`, 'info');
-            addLogEntry('🤖 JARVIS: Processando...', 'info');
-            
-            fetch('/api/assistant', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ 
-                    command: command,
-                    user_name: 'Sir'
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    displayAssistantResponse({result: data.result, command: command});
-                } else {
-                    addLogEntry(`❌ Erro: ${data.error}`, 'error');
-                }
-            })
-            .catch(error => {
-                addLogEntry(`❌ Erro de comunicação: ${error.message}`, 'error');
-            });
-        }
-
-        function displayAssistantResponse(data) {
-            const result = data.result;
-            
-            // Mostrar resposta do JARVIS
-            addLogEntry(`🤖 JARVIS: ${result.response}`, 'success');
-            
-            // Mostrar informações adicionais baseado na ação
-            if (result.action === 'project_created') {
-                addLogEntry(`✅ Projeto criado em: ${result.path}`, 'success');
-                if (result.next_steps) {
-                    addLogEntry('📋 Próximos passos:', 'info');
-                    result.next_steps.forEach(step => {
-                        addLogEntry(`  • ${step}`, 'info');
+            // Scan de rede
+            if (lower.includes('scan') || lower.includes('escanear') || lower.includes('rede')) {
+                const target = '127.0.0.1';
+                try {
+                    const res = await fetch('/api/scan', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ target })
                     });
+                    const data = await res.json();
+                    hideTyping();
+                    addMessage('assistant', 'JARVIS', formatScanResult(data));
+                } catch (e) {
+                    hideTyping();
+                    addMessage('assistant', 'JARVIS', '❌ Erro ao executar scan');
                 }
-            } else if (result.action === 'file_created') {
-                addLogEntry(`📄 Arquivo criado: ${result.file}`, 'success');
-            } else if (result.action === 'status_report') {
-                // Status já está na resposta
-            } else if (result.action === 'clarification_needed' && result.suggestions) {
-                addLogEntry('💡 Sugestões:', 'info');
-                result.suggestions.forEach(sug => {
-                    addLogEntry(`  • ${sug}`, 'info');
-                });
-            }
-            
-            // Limpar campo de entrada
-            document.getElementById('assistant-command').value = '';
-        }
-
-        function startScan() {
-            const target = document.getElementById('scan-target').value.trim();
-            if (!target) {
-                addLogEntry('❌ Por favor, insira um alvo válido', 'error');
                 return;
             }
 
-            addLogEntry(`🔍 Iniciando scan em ${target}...`, 'info');
-            
-            fetch('/api/scan', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ target: target })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    addLogEntry('✅ Scan iniciado com sucesso', 'success');
-                } else {
-                    addLogEntry(`❌ Erro no scan: ${data.error}`, 'error');
+            // Criar projeto
+            if (lower.includes('criar') || lower.includes('projeto') || lower.includes('website') || lower.includes('site')) {
+                setTimeout(() => {
+                    hideTyping();
+                    addMessage('assistant', 'JARVIS', `
+                        🚀 <strong>Criar Projeto</strong><br><br>
+                        🌐 Website<br>
+                        ⚡ API<br>
+                        📱 App Mobile<br>
+                        🤖 ML/AI
+                    `);
+                }, 800);
+                return;
+            }
+
+            // Segurança
+            if (lower.includes('segur') || lower.includes('hardening') || lower.includes('análise')) {
+                try {
+                    const res = await fetch('/api/hardening', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    const data = await res.json();
+                    hideTyping();
+                    addMessage('assistant', 'JARVIS', formatHardeningResult(data));
+                } catch (e) {
+                    hideTyping();
+                    addMessage('assistant', 'JARVIS', '❌ Erro na análise');
                 }
-            })
-            .catch(error => {
-                addLogEntry(`❌ Erro de comunicação: ${error.message}`, 'error');
+                return;
+            }
+
+            // Saudações
+            if (lower.includes('olá') || lower.includes('oi') || lower.includes('hello')) {
+                setTimeout(() => {
+                    hideTyping();
+                    addMessage('assistant', 'JARVIS', `
+                        👋 Olá! Sou o JARVIS.<br>
+                        Como posso ajudar?
+                    `);
+                }, 800);
+                return;
+            }
+
+            // Resposta padrão
+            setTimeout(() => {
+                hideTyping();
+                addMessage('assistant', 'JARVIS', `
+                    Digite:<br>
+                    • "scan" - analisar rede<br>
+                    • "segurança" - análise<br>
+                    • "criar projeto"<br>
+                    • "status"
+                `);
+            }, 800);
+        }
+
+        function formatScanResult(data) {
+            if (!data || !data.hosts) return 'Nenhum resultado';
+            let r = '🔍 <strong>Scan Completo</strong><br><br>';
+            data.hosts.forEach(h => {
+                r += `Host: ${h.ip}<br>`;
+                r += `Status: ${h.status}<br>`;
+                if (h.ports) r += `Portas: ${h.ports.join(', ')}<br>`;
+                r += '<br>';
             });
+            return r;
         }
 
-        function runHardening() {
-            addLogEntry('🛡️ Executando avaliação de segurança...', 'info');
-            
-            fetch('/api/hardening', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    addLogEntry('✅ Avaliação iniciada com sucesso', 'success');
-                } else {
-                    addLogEntry(`❌ Erro na avaliação: ${data.error}`, 'error');
-                }
-            })
-            .catch(error => {
-                addLogEntry(`❌ Erro de comunicação: ${error.message}`, 'error');
-            });
+        function formatHardeningResult(data) {
+            if (!data) return '❌ Erro';
+            return `🛡️ <strong>Análise de Segurança</strong><br><br>Score: ${data.overall_score || 0}/100`;
         }
 
-        function toggleVoiceRecognition() {
-            if (!recognition) {
-                addLogEntry('❌ Reconhecimento de voz não suportado neste navegador', 'error');
-                return;
-            }
+        // Menu toggle
+        document.getElementById('menuToggle').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('open');
+        });
 
-            if (isListening) {
-                recognition.stop();
-            } else {
-                recognition.start();
-            }
-        }
-
-        function updateVoiceIndicator() {
-            const indicator = document.getElementById('voice-indicator');
-            if (isListening) {
-                indicator.classList.add('listening');
-            } else {
-                indicator.classList.remove('listening');
-            }
-        }
-
-        function processVoiceCommand(command) {
-            fetch('/api/voice', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ command: command })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    addLogEntry(`🤖 JARVIS: ${data.response}`, 'success');
-                    
-                    // Execute action based on voice command
-                    if (data.action === 'scan') {
-                        startScan();
-                    } else if (data.action === 'penetration') {
-                        startPenetrationTest();
-                    } else if (data.action === 'exploit') {
-                        generateExploit();
-                    } else if (data.action === 'hardening') {
-                        runHardening();
-                    } else if (data.action === 'status') {
-                        requestStatus();
-                    } else if (data.action === 'assistant') {
-                        document.getElementById('assistant-command').value = command;
-                        sendAssistantCommand();
-                    }
-                } else {
-                    addLogEntry(`❌ Erro no comando de voz: ${data.error}`, 'error');
-                }
-            })
-            .catch(error => {
-                addLogEntry(`❌ Erro de comunicação: ${error.message}`, 'error');
-            });
-        }
-
-        function startPenetrationTest() {
-            const target = document.getElementById('pentest-target').value.trim();
-            const testType = document.getElementById('pentest-type').value;
-            
-            if (!target) {
-                addLogEntry('❌ Por favor, insira um alvo válido', 'error');
-                return;
-            }
-
-            addLogEntry(`🔴 Iniciando teste de penetração ${testType} em ${target}...`, 'info');
-            
-            fetch('/api/penetration', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ 
-                    target: target,
-                    test_type: testType
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    addLogEntry('✅ Teste de penetração iniciado', 'success');
-                } else {
-                    addLogEntry(`❌ Erro no teste: ${data.error}`, 'error');
-                }
-            })
-            .catch(error => {
-                addLogEntry(`❌ Erro de comunicação: ${error.message}`, 'error');
-            });
-        }
-
-        function generateExploit() {
-            const exploitType = document.getElementById('exploit-type').value;
-            const targetOs = document.getElementById('target-os').value;
-            
-            addLogEntry(`⚡ Gerando payload ${exploitType} para ${targetOs}...`, 'info');
-            
-            fetch('/api/exploit', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ 
-                    vulnerability_type: exploitType,
-                    target_os: targetOs
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    addLogEntry('✅ Payload gerado com sucesso', 'success');
-                    displayExploitResult(data.result);
-                } else {
-                    addLogEntry(`❌ Erro na geração: ${data.error}`, 'error');
-                }
-            })
-            .catch(error => {
-                addLogEntry(`❌ Erro de comunicação: ${error.message}`, 'error');
-            });
-        }
-
-        function displayPenetrationResult(data) {
-            const result = data.result;
-            if (result.error) {
-                addLogEntry(`❌ Erro no teste: ${result.error}`, 'error');
-                return;
-            }
-
-            addLogEntry(`🔴 Teste de penetração ${data.test_type} concluído`, 'success');
-            
-            if (result.open_ports) {
-                addLogEntry(`📡 Portas abertas encontradas: ${result.open_ports.length}`, 'info');
-                result.open_ports.slice(0, 5).forEach(port => {
-                    const service = result.services && result.services[port] ? result.services[port] : 'Unknown';
-                    addLogEntry(`  └─ Porta ${port}: ${service}`, 'info');
-                });
-            }
-            
-            if (result.vulnerabilities && result.vulnerabilities.length > 0) {
-                addLogEntry(`🚨 VULNERABILIDADES CRÍTICAS: ${result.vulnerabilities.length}`, 'error');
-                result.vulnerabilities.forEach(vuln => {
-                    addLogEntry(`  🔴 ${vuln.vulnerability || vuln.type} (${vuln.severity})`, 'error');
-                });
-            }
-            
-            if (result.successful_logins && result.successful_logins.length > 0) {
-                addLogEntry(`🔓 Credenciais fracas encontradas: ${result.successful_logins.length}`, 'error');
-                result.successful_logins.forEach(login => {
-                    addLogEntry(`  └─ User: ${login.username} | Pass: ${login.password}`, 'error');
-                });
-            }
-            
-            if (result.networks_found) {
-                addLogEntry(`📶 Redes Wi-Fi encontradas: ${result.networks_found.length}`, 'info');
-                result.networks_found.forEach(network => {
-                    const security = network.security || 'Unknown';
-                    const risk = security === 'None' ? '🔴 ALTO RISCO' : security === 'WEP' ? '🟡 RISCO MÉDIO' : '🟢 SEGURO';
-                    addLogEntry(`  └─ ${network.ssid}: ${security} ${risk}`, security === 'None' ? 'error' : 'info');
-                });
-            }
-        }
-
-        function displayExploitResult(result) {
-            if (result.error) {
-                addLogEntry(`❌ Erro na geração: ${result.error}`, 'error');
-                return;
-            }
-            
-            addLogEntry(`⚡ Payload ${result.vulnerability} gerado:`, 'success');
-            
-            if (result.payloads) {
-                Object.keys(result.payloads).forEach(key => {
-                    if (key !== 'description') {
-                        addLogEntry(`  ${key}: ${result.payloads[key]}`, 'info');
-                    }
-                });
-                addLogEntry(`💡 ${result.payloads.description}`, 'info');
-            }
-            
-            addLogEntry('⚠️  AVISO: Use apenas em ambiente autorizado!', 'error');
-        }
-
-        function displayScanResult(data) {
-            const result = data.result;
-            if (result.error) {
-                addLogEntry(`❌ Erro no scan: ${result.error}`, 'error');
-                return;
-            }
-
-            const hosts = result.hosts || [];
-            addLogEntry(`✅ Scan concluído - ${hosts.length} hosts analisados`, 'success');
-            
-            hosts.forEach(host => {
-                const ip = host.ip;
-                const ports = host.open_ports || [];
-                const status = host.status;
+        // Menu items
+        document.querySelectorAll('.menu-item[data-feature]').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                const feature = this.dataset.feature;
                 
-                addLogEntry(`📡 Host: ${ip} (${status})`, 'info');
-                if (ports.length > 0) {
-                    addLogEntry(`  └─ Portas abertas: ${ports.join(', ')}`, 'info');
-                } else {
-                    addLogEntry(`  └─ Nenhuma porta aberta detectada`, 'info');
+                // Mensagem baseada na funcionalidade
+                let msg = '';
+                switch(feature) {
+                    case 'assistant': msg = 'Olá'; break;
+                    case 'security': msg = 'Segurança'; break;
+                    case 'scanner': msg = 'Scan'; break;
+                    case 'projects': msg = 'Criar projeto'; break;
                 }
+                if (msg) sendQuickMessage(msg);
             });
-        }
+        });
 
-        function displayHardeningResult(data) {
-            const result = data.result;
-            if (result.error) {
-                addLogEntry(`❌ Erro na avaliação: ${result.error}`, 'error');
-                return;
-            }
+        // New chat
+        document.getElementById('newChatBtn').addEventListener('click', () => {
+            document.getElementById('chatMessages').innerHTML = '';
+            document.getElementById('welcomeScreen').style.display = 'flex';
+            messageHistory = [];
+        });
 
-            const score = result.overall_score || 0;
-            const recommendations = result.recommendations || [];
-            
-            addLogEntry(`✅ Avaliação concluída - Score: ${score}/100`, 'success');
-            
-            if (score >= 80) {
-                addLogEntry('🟢 Sistema bem protegido!', 'success');
-            } else if (score >= 60) {
-                addLogEntry('🟡 Sistema parcialmente protegido', 'info');
+        // Voice button (header)
+        document.getElementById('voiceBtn').addEventListener('click', () => {
+            if ('webkitSpeechRecognition' in window) {
+                const rec = new webkitSpeechRecognition();
+                rec.lang = 'pt-BR';
+                rec.continuous = false;
+                rec.start();
+                document.getElementById('voiceBtn').style.borderColor = 'var(--danger-color)';
+                rec.onresult = e => {
+                    messageInput.value = e.results[0][0].transcript;
+                    document.getElementById('voiceBtn').style.borderColor = '';
+                    sendMessage();
+                };
+                rec.onerror = () => document.getElementById('voiceBtn').style.borderColor = '';
             } else {
-                addLogEntry('🔴 Sistema precisa de melhorias', 'error');
+                alert('Reconhecimento de voz não disponível neste navegador');
             }
+        });
+
+        // Voice input button
+        if ('webkitSpeechRecognition' in window) {
+            const rec = new webkitSpeechRecognition();
+            rec.lang = 'pt-BR';
+            rec.continuous = false;
             
-            if (recommendations.length > 0) {
-                addLogEntry('📋 Principais recomendações:', 'info');
-                recommendations.slice(0, 3).forEach((rec, index) => {
-                    addLogEntry(`  ${index + 1}. ${rec}`, 'info');
-                });
-            }
+            document.getElementById('voiceInputBtn').addEventListener('click', () => {
+                rec.start();
+                document.getElementById('voiceInputBtn').style.color = 'var(--danger-color)';
+            });
+            
+            rec.onresult = e => {
+                messageInput.value = e.results[0][0].transcript;
+                document.getElementById('voiceInputBtn').style.color = '';
+            };
+            
+            rec.onerror = () => {
+                document.getElementById('voiceInputBtn').style.color = '';
+            };
+        } else {
+            document.getElementById('voiceInputBtn').style.opacity = '0.5';
+            document.getElementById('voiceInputBtn').title = 'Voz não disponível';
         }
 
-        // Auto-update status every 30 seconds
-        setInterval(requestStatus, 30000);
-        
-        // Initialize
-        requestStatus();
+        // Mobile detection
+        if (window.innerWidth <= 768) {
+            document.getElementById('menuToggle').style.display = 'block';
+        }
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 768) {
+                document.getElementById('menuToggle').style.display = 'block';
+            } else {
+                document.getElementById('menuToggle').style.display = 'none';
+                document.getElementById('sidebar').classList.remove('open');
+            }
+        });
+
+        // Close sidebar when clicking outside (mobile)
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768) {
+                const sidebar = document.getElementById('sidebar');
+                const menuToggle = document.getElementById('menuToggle');
+                if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    sidebar.classList.remove('open');
+                }
+            }
+        });
+
+        // Auto-scroll chat
+        function scrollToBottom() {
+            const container = document.getElementById('chatMessages');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                right: 20px;
+                background: var(--background-light);
+                border: 1px solid ${type === 'success' ? 'var(--success-color)' : type === 'error' ? 'var(--danger-color)' : 'var(--border-color)'};
+                border-radius: 12px;
+                padding: 15px 20px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+                z-index: 2000;
+                animation: slideInRight 0.3s ease;
+                max-width: 350px;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        // Log initial connection
+        console.log('🤖 JARVIS Interface carregada');
+        console.log('📱 Versão Mobile-Optimized');
     </script>
 </body>
 </html>
